@@ -69,7 +69,8 @@ $net = $total_income - $total_expense;
     <a href="users.php" class="btn">Manage Users</a>
     <br><br>
     <a href="transactions.php" class="btn">View All Transactions</a>
-
+    <br><br>
+    <a href="analytics.php" class="btn">System Analytics</a>
 </div>
 
 <?php include "../includes/footer.php"; ?>
