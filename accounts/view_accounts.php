@@ -14,6 +14,13 @@ if ($role == "Admin") {
 } else {
     $query = mysqli_query($conn, "SELECT * FROM accounts WHERE user_id=$user_id");
 }
+
+$type_icons = [
+    'Bank' => '🏦',
+    'Cash' => '💵',
+    'Mobile Wallet' => '📱',
+    'Credit Card' => '💳'
+];
 ?>
 
 <div class="container">
@@ -25,6 +32,9 @@ if ($role == "Admin") {
     <?php if (isset($_GET['deleted'])) { ?>
         <div class="alert alert-success">Account and all related transactions have been deleted.</div>
     <?php } ?>
+    <?php if (isset($_GET['error'])) { ?>
+        <div class="alert alert-danger">Account not found or you don't have permission to delete it.</div>
+    <?php } ?>
 
     <table>
         <tr>
@@ -35,12 +45,13 @@ if ($role == "Admin") {
         </tr>
         <?php while ($row = mysqli_fetch_assoc($query)) {
             $balance = getAccountBalance($conn, $row['id']);
+            $icon = $type_icons[$row['account_type']] ?? '';
             ?>
             <tr>
                 <td><a
                         href="account_details.php?id=<?php echo $row['id']; ?>"><?php echo htmlspecialchars($row['account_name']); ?></a>
                 </td>
-                <td><?php echo $row['account_type']; ?></td>
+                <td><?php echo $icon . ' ' . htmlspecialchars($row['account_type'] ?? '—'); ?></td>
                 <td>₹ <?php echo number_format($balance, 2); ?></td>
                 <td>
                     <a href="account_details.php?id=<?php echo $row['id']; ?>" class="action-link">View</a>

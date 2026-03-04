@@ -18,6 +18,7 @@ $transactions = mysqli_query($conn, "
 <div class="container">
     <div class="action-bar">
         <h2>All Transactions</h2>
+        <a href="/finance-system/index.php" class="btn btn-secondary">← Back</a>
         <a href="add_transaction.php" class="btn">+ Add Transaction</a>
     </div>
 

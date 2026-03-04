@@ -11,7 +11,10 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
 <div class="container">
     <div class="action-bar">
         <h2>Manage Categories</h2>
-        <a href="add_category.php" class="btn">+ Add New Category</a>
+        <div class="flex gap-2">
+            <a href="/finance-system/index.php" class="btn btn-secondary">← Back</a>
+            <a href="add_category.php" class="btn">+ Add New Category</a>
+        </div>
     </div>
 
     <table>

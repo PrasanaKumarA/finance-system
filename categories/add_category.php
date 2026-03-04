@@ -19,7 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 <div class="container">
-    <h2>Add New Category</h2>
+    <div class="action-bar">
+        <h2>Add New Category</h2>
+        <a href="view_categories.php" class="btn btn-secondary">← Back</a>
+    </div>
 
     <?php if ($success_msg) { ?>
         <div class="alert alert-success"><?php echo $success_msg; ?></div>

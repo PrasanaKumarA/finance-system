@@ -55,7 +55,10 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
 ?>
 
 <div class="container">
-    <h2>Record Transaction</h2>
+    <div class="action-bar">
+        <h2>Record Transaction</h2>
+        <a href="view_transactions.php" class="btn btn-secondary">← Back</a>
+    </div>
 
     <?php if ($error_msg) { ?>
         <div class="alert alert-danger"><?php echo $error_msg; ?></div>

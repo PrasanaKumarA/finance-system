@@ -65,7 +65,10 @@ $categories = mysqli_query($conn, "SELECT * FROM categories");
 ?>
 
 <div class="container">
-    <h2>Reports & Analytics</h2>
+    <div class="action-bar">
+        <h2>Reports & Analytics</h2>
+        <a href="/finance-system/index.php" class="btn btn-secondary">← Back</a>
+    </div>
 
     <div class="filter-box">
         <div class="quick-filters">

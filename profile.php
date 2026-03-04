@@ -61,7 +61,10 @@ $user = mysqli_fetch_assoc($user_query);
 ?>
 
 <div class="container">
-    <h2>Profile Settings</h2>
+    <div class="action-bar">
+        <h2>Profile Settings</h2>
+        <a href="/finance-system/index.php" class="btn btn-secondary">← Back</a>
+    </div>
 
     <?php if ($success_msg) { ?>
         <div class="alert alert-success">

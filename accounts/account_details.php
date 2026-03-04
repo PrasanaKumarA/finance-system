@@ -35,7 +35,10 @@ $transactions = mysqli_query($conn, "
 ");
 ?>
 <div class="container">
-    <h2>Account: <?php echo htmlspecialchars($account['account_name']); ?></h2>
+    <div class="action-bar">
+        <h2>Account: <?php echo htmlspecialchars($account['account_name']); ?></h2>
+        <a href="view_accounts.php" class="btn btn-secondary">← Back</a>
+    </div>
 
     <div class="cards">
         <div class="card cash">
