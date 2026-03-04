@@ -1,6 +1,7 @@
 <?php
 include "../includes/auth.php";
 include "../includes/db.php";
+$page_title = "Add Category";
 include "../includes/header.php";
 include "../includes/navbar.php";
 
@@ -20,10 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container">
     <h2>Add New Category</h2>
 
-    <?php if ($success_msg)
-        echo "<p style='color: var(--success); font-weight: 600; background: #ecfdf5; padding: 12px; border-radius: 6px; border: 1px solid #a7f3d0;'>$success_msg</p>"; ?>
+    <?php if ($success_msg) { ?>
+        <div class="alert alert-success"><?php echo $success_msg; ?></div>
+    <?php } ?>
 
-    <form method="POST" style="margin-top: 20px;">
+    <form method="POST">
         <label>Category Name</label>
         <input type="text" name="category_name" placeholder="E.g. Groceries, Salary, Utilities..." required>
 
@@ -33,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="Expense">Expense</option>
         </select>
 
-        <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 10px;">+ Save Category</button>
+        <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 8px;">+ Save Category</button>
     </form>
 </div>
 <?php include "../includes/footer.php"; ?>

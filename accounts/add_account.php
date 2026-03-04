@@ -1,6 +1,7 @@
 <?php
 include "../includes/auth.php";
 include "../includes/db.php";
+$page_title = "Add Account";
 include "../includes/header.php";
 include "../includes/navbar.php";
 
@@ -24,10 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container">
     <h2>Add New Account</h2>
 
-    <?php if ($success_msg)
-        echo "<p style='color: var(--success); font-weight: 600; background: #ecfdf5; padding: 12px; border-radius: 6px; border: 1px solid #a7f3d0;'>$success_msg</p>"; ?>
+    <?php if ($success_msg) { ?>
+        <div class="alert alert-success"><?php echo $success_msg; ?></div>
+    <?php } ?>
 
-    <form method="POST" style="margin-top: 20px;">
+    <form method="POST">
         <label>Account Name</label>
         <input type="text" name="account_name" placeholder="E.g. Main Checking, Savings..." required>
 
@@ -42,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label>Opening Balance (₹)</label>
         <input type="number" step="0.01" name="opening_balance" placeholder="0.00" required>
 
-        <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 10px;">+ Add Account</button>
+        <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 8px;">+ Add Account</button>
     </form>
 </div>
 

@@ -2,6 +2,7 @@
 include "../includes/auth.php";
 include "../includes/db.php";
 include "admin_auth.php";
+$page_title = "All Transactions";
 include "../includes/header.php";
 include "../includes/navbar.php";
 
@@ -47,40 +48,43 @@ $net = $total_income - $total_expense;
 
 <div class="container">
 
-    <h2>Admin - All Transactions</h2>
+    <h2>Admin — All Transactions</h2>
 
-    <form method="GET" style="margin-bottom:15px;">
-        <select name="user_id">
-            <option value="">All Users</option>
-            <?php while ($u = mysqli_fetch_assoc($users)) { ?>
-                <option value="<?= $u['id'] ?>" <?= ($selected_user == $u['id']) ? 'selected' : '' ?>>
-                    <?= $u['name'] ?>
-                </option>
-            <?php } ?>
-        </select>
-        <button type="submit">Filter</button>
-    </form>
+    <div class="filter-box mb-3">
+        <form method="GET">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Filter by User</label>
+                    <select name="user_id">
+                        <option value="">All Users</option>
+                        <?php while ($u = mysqli_fetch_assoc($users)) { ?>
+                            <option value="<?= $u['id'] ?>" <?= ($selected_user == $u['id']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($u['name']) ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div>
+                    <button type="submit">Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <div class="cards">
         <div class="card bank">
             <h3>Total Income</h3>
-            <p>₹
-                <?= number_format($total_income, 2) ?>
-            </p>
+            <p>₹ <?= number_format($total_income, 2) ?></p>
         </div>
 
         <div class="card cash">
             <h3>Total Expense</h3>
-            <p>₹
-                <?= number_format($total_expense, 2) ?>
-            </p>
+            <p>₹ <?= number_format($total_expense, 2) ?></p>
         </div>
 
         <div class="card total">
             <h3>Net</h3>
-            <p>₹
-                <?= number_format($net, 2) ?>
-            </p>
+            <p>₹ <?= number_format($net, 2) ?></p>
         </div>
     </div>
 
@@ -96,24 +100,17 @@ $net = $total_income - $total_expense;
 
         <?php foreach ($rows as $r) { ?>
             <tr>
+                <td><?= $r['transaction_date'] ?></td>
+                <td><?= htmlspecialchars($r['user_name']) ?></td>
+                <td><?= htmlspecialchars($r['account_name']) ?></td>
+                <td><?= htmlspecialchars($r['category_name'] ?? '-') ?></td>
                 <td>
-                    <?= $r['transaction_date'] ?>
+                    <span class="badge <?= $r['type'] == 'Income' ? 'badge-income' : 'badge-expense' ?>">
+                        <?= $r['type'] ?>
+                    </span>
                 </td>
-                <td>
-                    <?= $r['user_name'] ?>
-                </td>
-                <td>
-                    <?= $r['account_name'] ?>
-                </td>
-                <td>
-                    <?= $r['category_name'] ?>
-                </td>
-                <td>
-                    <?= $r['type'] ?>
-                </td>
-                <td style="color:<?= $r['type'] == 'Income' ? 'green' : 'red' ?>">
-                    ₹
-                    <?= number_format($r['amount'], 2) ?>
+                <td class="<?= $r['type'] == 'Income' ? 'text-success' : 'text-danger' ?>">
+                    ₹ <?= number_format($r['amount'], 2) ?>
                 </td>
             </tr>
         <?php } ?>

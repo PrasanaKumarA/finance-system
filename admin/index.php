@@ -2,6 +2,7 @@
 include "../includes/auth.php";
 include "../includes/db.php";
 include "admin_auth.php";
+$page_title = "Admin Dashboard";
 include "../includes/header.php";
 include "../includes/navbar.php";
 
@@ -36,41 +37,31 @@ $net = $total_income - $total_expense;
 
         <div class="card total">
             <h3>Total Users</h3>
-            <p>
-                <?= $total_users ?>
-            </p>
+            <p><?= $total_users ?></p>
         </div>
 
         <div class="card bank">
             <h3>Total System Income</h3>
-            <p>₹
-                <?= number_format($total_income, 2) ?>
-            </p>
+            <p>₹ <?= number_format($total_income, 2) ?></p>
         </div>
 
         <div class="card cash">
             <h3>Total System Expense</h3>
-            <p>₹
-                <?= number_format($total_expense, 2) ?>
-            </p>
+            <p>₹ <?= number_format($total_expense, 2) ?></p>
         </div>
 
         <div class="card total">
             <h3>Net Profit</h3>
-            <p>₹
-                <?= number_format($net, 2) ?>
-            </p>
+            <p>₹ <?= number_format($net, 2) ?></p>
         </div>
 
     </div>
 
-    <br>
-
-    <a href="users.php" class="btn">Manage Users</a>
-    <br><br>
-    <a href="transactions.php" class="btn">View All Transactions</a>
-    <br><br>
-    <a href="analytics.php" class="btn">System Analytics</a>
+    <div class="flex flex-wrap gap-2 mt-2">
+        <a href="users.php" class="btn">Manage Users</a>
+        <a href="transactions.php" class="btn btn-secondary">View All Transactions</a>
+        <a href="analytics.php" class="btn btn-secondary">System Analytics</a>
+    </div>
 </div>
 
 <?php include "../includes/footer.php"; ?>

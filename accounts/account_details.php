@@ -2,6 +2,7 @@
 include "../includes/auth.php";
 include "../includes/db.php";
 include "../includes/functions.php";
+$page_title = "Account Details";
 include "../includes/header.php";
 include "../includes/navbar.php";
 
@@ -17,7 +18,7 @@ if ($role == "Admin") {
 }
 
 if (mysqli_num_rows($account_query) == 0) {
-    echo "<div class='container'><p>Account not found or access denied.</p></div>";
+    echo "<div class='container'><p class='text-danger'>Account not found or access denied.</p></div>";
     include "../includes/footer.php";
     exit();
 }
@@ -34,33 +35,24 @@ $transactions = mysqli_query($conn, "
 ");
 ?>
 <div class="container">
-    <h2>Account Details:
-        <?php echo htmlspecialchars($account['account_name']); ?>
-    </h2>
+    <h2>Account: <?php echo htmlspecialchars($account['account_name']); ?></h2>
 
-    <div class="cards" style="justify-content: flex-start;">
+    <div class="cards">
         <div class="card cash">
             <h3>Available Balance</h3>
-            <p>₹
-                <?php echo number_format($balance, 2); ?>
-            </p>
+            <p>₹ <?php echo number_format($balance, 2); ?></p>
         </div>
         <div class="card bank">
             <h3>Opening Balance</h3>
-            <p>₹
-                <?php echo number_format($account['opening_balance'] ?? 0, 2); ?>
-            </p>
+            <p>₹ <?php echo number_format($account['opening_balance'] ?? 0, 2); ?></p>
         </div>
         <div class="card total">
             <h3>Account Type</h3>
-            <p>
-                <?php echo htmlspecialchars($account['account_type']); ?>
-            </p>
+            <p><?php echo htmlspecialchars($account['account_type']); ?></p>
         </div>
     </div>
 
-    <br>
-    <h3>Specific Transaction History</h3>
+    <h3>Transaction History</h3>
     <table>
         <tr>
             <th>Date</th>
@@ -72,27 +64,22 @@ $transactions = mysqli_query($conn, "
         <?php if (mysqli_num_rows($transactions) > 0) {
             while ($t = mysqli_fetch_assoc($transactions)) { ?>
                 <tr>
+                    <td><?php echo $t['transaction_date']; ?></td>
+                    <td><?php echo $t['category_name'] ? htmlspecialchars($t['category_name']) : '-'; ?></td>
+                    <td><?php echo htmlspecialchars($t['description']); ?></td>
                     <td>
-                        <?php echo $t['transaction_date']; ?>
+                        <span class="badge <?php echo $t['type'] == 'Income' ? 'badge-income' : 'badge-expense'; ?>">
+                            <?php echo $t['type']; ?>
+                        </span>
                     </td>
-                    <td>
-                        <?php echo $t['category_name'] ? htmlspecialchars($t['category_name']) : '-'; ?>
-                    </td>
-                    <td>
-                        <?php echo htmlspecialchars($t['description']); ?>
-                    </td>
-                    <td>
-                        <?php echo $t['type']; ?>
-                    </td>
-                    <td style="color:<?php echo $t['type'] == 'Income' ? 'green' : 'red'; ?>">
-                        ₹
-                        <?php echo number_format($t['amount'], 2); ?>
+                    <td class="<?php echo $t['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
+                        ₹ <?php echo number_format($t['amount'], 2); ?>
                     </td>
                 </tr>
             <?php }
         } else { ?>
             <tr>
-                <td colspan="5" style="text-align: center;">No transactions found for this account.</td>
+                <td colspan="5" class="text-center text-muted">No transactions found for this account.</td>
             </tr>
         <?php } ?>
     </table>

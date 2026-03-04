@@ -1,8 +1,13 @@
 <?php
 include "../includes/auth.php";
 include "../includes/db.php";
+$page_title = "Transfer Money";
+include "../includes/header.php";
+include "../includes/navbar.php";
 
 $user_id = $_SESSION['user_id'];
+$success_msg = "";
+$error_msg = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -12,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date = $_POST['transaction_date'];
 
     if ($from_account == $to_account) {
-        echo "Cannot transfer to same account";
+        $error_msg = "Cannot transfer to same account";
     } else {
 
         // Deduct from source
@@ -25,46 +30,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         (user_id, account_id, type, amount, transaction_date, description)
         VALUES ($user_id, $to_account, 'Income', '$amount', '$date', 'Transfer In')");
 
-        echo "Transfer Successful";
+        $success_msg = "Transfer Successful!";
     }
 }
 
 $accounts = mysqli_query($conn, "SELECT * FROM accounts WHERE user_id=$user_id");
 ?>
 
-<h2>Transfer Money</h2>
+<div class="container">
+    <h2>Transfer Money</h2>
 
-<form method="POST">
+    <?php if ($error_msg) { ?>
+        <div class="alert alert-danger"><?php echo $error_msg; ?></div>
+    <?php } ?>
+    <?php if ($success_msg) { ?>
+        <div class="alert alert-success"><?php echo $success_msg; ?></div>
+    <?php } ?>
 
-    <label>From Account:</label><br>
-    <select name="from_account">
-        <?php while ($row = mysqli_fetch_assoc($accounts)) { ?>
-            <option value="<?php echo $row['id']; ?>">
-                <?php echo $row['account_name']; ?>
-            </option>
-        <?php } ?>
-    </select><br><br>
+    <form method="POST">
 
-    <?php
-    // Reload accounts again because previous loop consumed result
-    $accounts = mysqli_query($conn, "SELECT * FROM accounts WHERE user_id=$user_id");
-    ?>
+        <label>From Account</label>
+        <select name="from_account" required>
+            <?php while ($row = mysqli_fetch_assoc($accounts)) { ?>
+                <option value="<?php echo $row['id']; ?>">
+                    <?php echo $row['account_name']; ?>
+                </option>
+            <?php } ?>
+        </select>
 
-    <label>To Account:</label><br>
-    <select name="to_account">
-        <?php while ($row = mysqli_fetch_assoc($accounts)) { ?>
-            <option value="<?php echo $row['id']; ?>">
-                <?php echo $row['account_name']; ?>
-            </option>
-        <?php } ?>
-    </select><br><br>
+        <?php
+        // Reload accounts again because previous loop consumed result
+        $accounts = mysqli_query($conn, "SELECT * FROM accounts WHERE user_id=$user_id");
+        ?>
 
-    <label>Amount:</label><br>
-    <input type="number" name="amount" required><br><br>
+        <label>To Account</label>
+        <select name="to_account" required>
+            <?php while ($row = mysqli_fetch_assoc($accounts)) { ?>
+                <option value="<?php echo $row['id']; ?>">
+                    <?php echo $row['account_name']; ?>
+                </option>
+            <?php } ?>
+        </select>
 
-    <label>Date:</label><br>
-    <input type="date" name="transaction_date" required><br><br>
+        <label>Amount (₹)</label>
+        <input type="number" step="0.01" name="amount" placeholder="0.00" required>
 
-    <button type="submit">Transfer</button>
+        <label>Date</label>
+        <input type="date" name="transaction_date" value="<?php echo date('Y-m-d'); ?>" required>
 
-</form>
+        <button type="submit" class="btn" style="width: 100%; margin-top: 8px;">Transfer</button>
+
+    </form>
+</div>
+
+<?php include "../includes/footer.php"; ?>

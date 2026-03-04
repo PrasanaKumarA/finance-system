@@ -1,6 +1,7 @@
 <?php
 include "../includes/auth.php";
 include "../includes/db.php";
+$page_title = "All Transactions";
 include "../includes/header.php";
 include "../includes/navbar.php";
 
@@ -15,41 +16,33 @@ $transactions = mysqli_query($conn, "
 ");
 ?>
 <div class="container">
-    <h2>All Transactions</h2>
-    <a href="add_transaction.php" class="btn"
-        style="padding: 10px 15px; background: #3498db; color: white; text-decoration: none; border-radius: 4px;">+ Add
-        Transaction</a>
-    <br><br>
-    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-        <tr style="background: #f4f4f4;">
-            <th style="padding: 10px; border: 1px solid #ddd;">Date</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Account</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Category</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Description</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Type</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Amount</th>
+    <div class="action-bar">
+        <h2>All Transactions</h2>
+        <a href="add_transaction.php" class="btn">+ Add Transaction</a>
+    </div>
+
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Account</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Amount</th>
         </tr>
         <?php while ($row = mysqli_fetch_assoc($transactions)) { ?>
             <tr>
-                <td style="padding: 10px; border: 1px solid #ddd;">
-                    <?php echo $row['transaction_date']; ?>
+                <td><?php echo $row['transaction_date']; ?></td>
+                <td><?php echo htmlspecialchars($row['account_name']); ?></td>
+                <td><?php echo htmlspecialchars($row['category_name'] ?? '-'); ?></td>
+                <td><?php echo htmlspecialchars($row['description']); ?></td>
+                <td>
+                    <span class="badge <?php echo $row['type'] == 'Income' ? 'badge-income' : 'badge-expense'; ?>">
+                        <?php echo $row['type']; ?>
+                    </span>
                 </td>
-                <td style="padding: 10px; border: 1px solid #ddd;">
-                    <?php echo htmlspecialchars($row['account_name']); ?>
-                </td>
-                <td style="padding: 10px; border: 1px solid #ddd;">
-                    <?php echo htmlspecialchars($row['category_name'] ?? '-'); ?>
-                </td>
-                <td style="padding: 10px; border: 1px solid #ddd;">
-                    <?php echo htmlspecialchars($row['description']); ?>
-                </td>
-                <td style="padding: 10px; border: 1px solid #ddd;">
-                    <?php echo $row['type']; ?>
-                </td>
-                <td
-                    style="padding: 10px; border: 1px solid #ddd; color:<?php echo $row['type'] == 'Income' ? 'green' : 'red'; ?>">
-                    ₹
-                    <?php echo number_format($row['amount'], 2); ?>
+                <td class="<?php echo $row['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
+                    ₹ <?php echo number_format($row['amount'], 2); ?>
                 </td>
             </tr>
         <?php } ?>

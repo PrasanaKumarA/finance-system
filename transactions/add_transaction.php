@@ -1,6 +1,7 @@
 <?php
 include "../includes/auth.php";
 include "../includes/db.php";
+$page_title = "Record Transaction";
 include "../includes/header.php";
 include "../includes/navbar.php";
 
@@ -56,15 +57,17 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
 <div class="container">
     <h2>Record Transaction</h2>
 
-    <?php if ($error_msg)
-        echo "<p style='color: var(--danger); font-weight: 600; background: #fef2f2; padding: 12px; border-radius: 6px; border: 1px solid #fecaca;'>$error_msg</p>"; ?>
-    <?php if ($success_msg)
-        echo "<p style='color: var(--success); font-weight: 600; background: #ecfdf5; padding: 12px; border-radius: 6px; border: 1px solid #a7f3d0;'>$success_msg</p>"; ?>
+    <?php if ($error_msg) { ?>
+        <div class="alert alert-danger"><?php echo $error_msg; ?></div>
+    <?php } ?>
+    <?php if ($success_msg) { ?>
+        <div class="alert alert-success"><?php echo $success_msg; ?></div>
+    <?php } ?>
 
-    <form method="POST" style="margin-top: 20px;">
+    <form method="POST">
 
-        <div style="display: flex; gap: 20px;">
-            <div style="flex: 1;">
+        <div class="form-row mb-2">
+            <div class="form-group">
                 <label>Transaction Type</label>
                 <select name="type" id="type" required>
                     <option value="Income">Income</option>
@@ -72,7 +75,7 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
                     <option value="Transfer">Account Transfer</option>
                 </select>
             </div>
-            <div style="flex: 1;">
+            <div class="form-group">
                 <label>Date</label>
                 <input type="date" name="transaction_date" value="<?php echo date('Y-m-d'); ?>" required>
             </div>
@@ -85,7 +88,7 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
             <?php } ?>
         </select>
 
-        <div id="transfer_fields" style="display:none; padding-top: 5px;">
+        <div id="transfer_fields" style="display:none;">
             <label>Destination Account</label>
             <select name="to_account_id" id="to_account_id">
                 <?php while ($row = mysqli_fetch_assoc($to_accounts)) { ?>
@@ -95,19 +98,20 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
         </div>
 
         <div id="category_section">
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <label>Category</label>
+            <div class="flex justify-between items-center mb-1">
+                <label style="margin-bottom: 0;">Category</label>
                 <span style="font-size: 13px; cursor: pointer; color: var(--primary); font-weight: 500;"
-                    onclick="toggleAddCategory()">+ Quick Add Category</span>
+                    onclick="toggleAddCategory()">+ Quick Add</span>
             </div>
 
             <div id="add_category_form"
-                style="display:none; background: #f8fafc; padding: 15px; margin-bottom: 20px; border: 1px dashed var(--primary); border-radius: var(--radius-sm);">
-                <label style="font-size: 13px;">New Category Name</label>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="new_category_name" placeholder="Category Name" style="margin-bottom: 0;">
-                    <button type="button" onclick="addNewCategory()" class="btn btn-primary"
-                        style="padding: 10px 15px;">Add</button>
+                style="display:none; background: var(--input-bg); padding: 16px; margin-bottom: 20px; border: 1.5px dashed var(--primary); border-radius: var(--radius-sm);">
+                <label style="font-size: 12px;">New Category Name</label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" id="new_category_name" placeholder="Category Name" style="margin-bottom: 0;">
+                    </div>
+                    <button type="button" onclick="addNewCategory()" class="btn btn-sm">Add</button>
                 </div>
                 <span id="cat_msg" style="display:block; margin-top:5px; font-size:13px;"></span>
             </div>
@@ -118,7 +122,8 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
                 mysqli_data_seek($categories, 0);
                 while ($cat = mysqli_fetch_assoc($categories)) { ?>
                     <option value="<?php echo $cat['id']; ?>" data-type="<?php echo $cat['type']; ?>">
-                        <?php echo $cat['category_name']; ?></option>
+                        <?php echo $cat['category_name']; ?>
+                    </option>
                 <?php } ?>
             </select>
         </div>
@@ -129,7 +134,7 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
         <label>Description / Notes</label>
         <input type="text" name="description" placeholder="Optional notes...">
 
-        <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">Save Transaction</button>
+        <button type="submit" class="btn" style="width: 100%; margin-top: 8px;">Save Transaction</button>
 
     </form>
 </div>
@@ -152,7 +157,6 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
             categorySection.style.display = 'block';
             transferFields.style.display = 'none';
             accountLabel.innerText = 'Primary Account';
-            // Category isn't strictly globally required unless logic dictates it
             filterCategories();
         }
     }

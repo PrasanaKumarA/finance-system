@@ -2,6 +2,7 @@
 include "includes/auth.php";
 include "includes/db.php";
 include "includes/functions.php";
+$page_title = "Dashboard";
 include "includes/header.php";
 include "includes/navbar.php";
 
@@ -146,21 +147,21 @@ $transactions = mysqli_query($conn, "
     <h3>Expense Distribution</h3>
 
     <?php if (!empty($category_labels)) { ?>
-        <div class="card" style="margin-bottom:30px; width:100%; max-width: 500px; margin: 0 auto 30px auto;">
+        <div class="chart-container" style="max-width: 500px; margin: 0 auto 30px auto;">
             <canvas id="expenseChart"></canvas>
         </div>
     <?php } else { ?>
-        <p style="color:gray;">No expense data available.</p>
+        <p class="text-muted">No expense data available.</p>
     <?php } ?>
 
     <!-- BAR CHART -->
     <h3>Income vs Expense (Last 6 Months)</h3>
-    <div class="card" style="margin-bottom:40px;">
+    <div class="chart-container">
         <canvas id="barChart" style="max-height:350px;"></canvas>
     </div>
 
     <!-- RECENT TRANSACTIONS -->
-    <h3>Recent Transactions</h3>
+    <h3 class="mt-3">Recent Transactions</h3>
     <table>
         <tr>
             <th>Date</th>
@@ -176,8 +177,12 @@ $transactions = mysqli_query($conn, "
                 <td><?php echo $row['account_name']; ?></td>
                 <td><?php echo $row['category_name']; ?></td>
                 <td><?php echo htmlspecialchars($row['description']); ?></td>
-                <td><?php echo $row['type']; ?></td>
-                <td style="color:<?php echo $row['type'] == 'Income' ? 'green' : 'red'; ?>">
+                <td>
+                    <span class="badge <?php echo $row['type'] == 'Income' ? 'badge-income' : 'badge-expense'; ?>">
+                        <?php echo $row['type']; ?>
+                    </span>
+                </td>
+                <td class="<?php echo $row['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
                     ₹ <?php echo number_format($row['amount'], 2); ?>
                 </td>
             </tr>
@@ -187,17 +192,32 @@ $transactions = mysqli_query($conn, "
 </div>
 
 <script>
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const chartTextColor = isDark ? '#94a3b8' : '#6b7280';
+    const chartGridColor = isDark ? 'rgba(148,163,184,0.1)' : 'rgba(0,0,0,0.06)';
+
+    Chart.defaults.color = chartTextColor;
+    Chart.defaults.borderColor = chartGridColor;
+
     <?php if (!empty($category_labels)) { ?>
         new Chart(document.getElementById('expenseChart'), {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 labels: <?php echo json_encode($category_labels); ?>,
                 datasets: [{
                     data: <?php echo json_encode($category_values); ?>,
-                    backgroundColor: ['#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#9b59b6', '#1abc9c']
+                    backgroundColor: ['#6366f1', '#06b6d4', '#f59e0b', '#10b981', '#ec4899', '#8b5cf6'],
+                    borderWidth: 0,
+                    hoverOffset: 8
                 }]
             },
-            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            options: {
+                responsive: true,
+                cutout: '65%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' } }
+                }
+            }
         });
     <?php } ?>
 
@@ -208,19 +228,27 @@ $transactions = mysqli_query($conn, "
             datasets: [
                 {
                     label: 'Income',
-                    backgroundColor: '#2ecc71',
+                    backgroundColor: '#10b981',
+                    borderRadius: 6,
                     data: <?php echo json_encode($bar_income); ?>
                 },
                 {
                     label: 'Expense',
-                    backgroundColor: '#e74c3c',
+                    backgroundColor: '#ef4444',
+                    borderRadius: 6,
                     data: <?php echo json_encode($bar_expense); ?>
                 }
             ]
         },
         options: {
             responsive: true,
-            scales: { y: { beginAtZero: true } }
+            plugins: {
+                legend: { labels: { usePointStyle: true, pointStyle: 'circle', padding: 16 } }
+            },
+            scales: {
+                y: { beginAtZero: true, grid: { color: chartGridColor } },
+                x: { grid: { display: false } }
+            }
         }
     });
 </script>

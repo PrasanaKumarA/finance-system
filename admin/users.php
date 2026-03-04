@@ -2,6 +2,7 @@
 include "../includes/auth.php";
 include "../includes/db.php";
 include "admin_auth.php";
+$page_title = "Manage Users";
 include "../includes/header.php";
 include "../includes/navbar.php";
 
@@ -55,27 +56,35 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY created_at DESC");
     <h3>Add New User</h3>
 
     <?php if (isset($error)) { ?>
-        <p style="color:red;"><?= $error ?></p>
+        <div class="alert alert-danger"><?= $error ?></div>
     <?php } ?>
 
     <?php if (isset($success)) { ?>
-        <p style="color:green;"><?= $success ?></p>
+        <div class="alert alert-success"><?= $success ?></div>
     <?php } ?>
 
-    <form method="POST" style="margin-bottom:20px;">
+    <form method="POST" class="mb-3">
+        <label>Full Name</label>
         <input type="text" name="name" placeholder="Full Name" required>
+
+        <label>Username</label>
         <input type="text" name="username" placeholder="Username" required>
+
+        <label>Password</label>
         <input type="password" name="password" placeholder="Password" required>
 
+        <label>Role</label>
         <select name="role">
             <option value="user">User</option>
             <option value="Admin">Admin</option>
         </select>
 
-        <button type="submit" name="add_user">Add User</button>
+        <button type="submit" name="add_user" style="width: 100%; margin-top: 8px;">Add User</button>
     </form>
 
     <hr>
+
+    <h3>Existing Users</h3>
 
     <table>
         <tr>
@@ -90,37 +99,39 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY created_at DESC");
         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
             <tr>
                 <td><?= $row['id'] ?></td>
-                <td><?= $row['name'] ?></td>
-                <td><?= $row['username'] ?></td>
-                <td><?= $row['role'] ?></td>
+                <td><?= htmlspecialchars($row['name']) ?></td>
+                <td><?= htmlspecialchars($row['username']) ?></td>
+                <td>
+                    <span class="badge <?= $row['role'] == 'Admin' ? 'badge-admin' : 'badge-income' ?>">
+                        <?= $row['role'] ?>
+                    </span>
+                </td>
                 <td><?= $row['created_at'] ?></td>
 
                 <td>
                     <?php if ($row['id'] != $_SESSION['user_id']) { ?>
 
-                        <!-- Role Toggle -->
                         <?php if ($row['role'] == 'Admin') { ?>
-                            <a href="toggle_role.php?id=<?= $row['id'] ?>" style="color:orange;"
+                            <a href="toggle_role.php?id=<?= $row['id'] ?>" class="text-warning"
                                 onclick="return confirm('Change this Admin to User?')">
                                 Make User
                             </a>
                         <?php } else { ?>
-                            <a href="toggle_role.php?id=<?= $row['id'] ?>" style="color:green;"
+                            <a href="toggle_role.php?id=<?= $row['id'] ?>" class="text-success"
                                 onclick="return confirm('Promote this User to Admin?')">
                                 Make Admin
                             </a>
                         <?php } ?>
 
-                        |
+                        &nbsp;|&nbsp;
 
-                        <!-- Delete -->
-                        <a href="delete_user.php?id=<?= $row['id'] ?>" style="color:red;"
+                        <a href="delete_user.php?id=<?= $row['id'] ?>" class="text-danger"
                             onclick="return confirm('Delete this user?')">
                             Delete
                         </a>
 
                     <?php } else { ?>
-                        <span style="color:gray;">Current User</span>
+                        <span class="text-muted">Current User</span>
                     <?php } ?>
                 </td>
             </tr>

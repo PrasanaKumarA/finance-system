@@ -2,6 +2,7 @@
 include "../includes/auth.php";
 include "../includes/db.php";
 include "admin_auth.php";
+$page_title = "System Analytics";
 include "../includes/header.php";
 include "../includes/navbar.php";
 
@@ -67,28 +68,31 @@ if (empty($user_labels)) {
 ?>
 
 <div class="container">
-    <h2>Admin System Analytics</h2>
+    <h2>System Analytics</h2>
 
-    <div style="max-width:800px;margin:auto;">
+    <div class="chart-container" style="max-width:800px;">
+        <h3>Income vs Expense</h3>
         <canvas id="incomeExpenseChart"></canvas>
     </div>
 
-    <br><br>
-
-    <div style="max-width:600px;margin:auto;">
+    <div class="chart-container" style="max-width:600px;">
+        <h3>Expense Distribution</h3>
         <canvas id="expenseChart"></canvas>
     </div>
 
-    <br><br>
-
-    <div style="max-width:800px;margin:auto;">
+    <div class="chart-container" style="max-width:800px;">
+        <h3>Income by User</h3>
         <canvas id="userChart"></canvas>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const chartTextColor = isDark ? '#94a3b8' : '#6b7280';
+    const chartGridColor = isDark ? 'rgba(148,163,184,0.1)' : 'rgba(0,0,0,0.06)';
+
+    Chart.defaults.color = chartTextColor;
+    Chart.defaults.borderColor = chartGridColor;
 
     /* Income vs Expense */
     new Chart(document.getElementById('incomeExpenseChart'), {
@@ -98,38 +102,39 @@ if (empty($user_labels)) {
             datasets: [{
                 label: 'System Summary',
                 data: [<?= $total_income ?>, <?= $total_expense ?>],
-                backgroundColor: ['#2ecc71', '#e74c3c']
+                backgroundColor: ['#10b981', '#ef4444'],
+                borderRadius: 6
             }]
         },
         options: {
             responsive: true,
             plugins: {
                 legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true, grid: { color: chartGridColor } },
+                x: { grid: { display: false } }
             }
         }
     });
 
     /* Expense Distribution */
     new Chart(document.getElementById('expenseChart'), {
-        type: 'pie',
+        type: 'doughnut',
         data: {
             labels: <?= json_encode($cat_labels) ?>,
             datasets: [{
                 data: <?= json_encode($cat_values) ?>,
-                backgroundColor: [
-                    '#e74c3c',
-                    '#3498db',
-                    '#2ecc71',
-                    '#9b59b6',
-                    '#f1c40f',
-                    '#1abc9c'
-                ]
+                backgroundColor: ['#6366f1', '#06b6d4', '#10b981', '#8b5cf6', '#f59e0b', '#ec4899'],
+                borderWidth: 0,
+                hoverOffset: 8
             }]
         },
         options: {
             responsive: true,
+            cutout: '65%',
             plugins: {
-                legend: { position: 'bottom' }
+                legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' } }
             }
         }
     });
@@ -142,14 +147,18 @@ if (empty($user_labels)) {
             datasets: [{
                 label: 'Income by User',
                 data: <?= json_encode($user_values) ?>,
-                backgroundColor: '#3498db'
+                backgroundColor: '#6366f1',
+                borderRadius: 6
             }]
         },
         options: {
-            responsive: true
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, grid: { color: chartGridColor } },
+                x: { grid: { display: false } }
+            }
         }
     });
-
 </script>
 
 <?php include "../includes/footer.php"; ?>

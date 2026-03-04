@@ -1,6 +1,7 @@
 <?php
 include "../includes/auth.php";
 include "../includes/db.php";
+$page_title = "Reports & Analytics";
 include "../includes/header.php";
 include "../includes/navbar.php";
 
@@ -66,129 +67,114 @@ $categories = mysqli_query($conn, "SELECT * FROM categories");
 <div class="container">
     <h2>Reports & Analytics</h2>
 
-    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-        <p style="margin-top:0; font-weight:bold;">Quick Filters:</p>
-        <button type="button" class="btn" style="padding: 5px 10px; margin-right: 5px;"
-            onclick="setDateRange('week')">This Week</button>
-        <button type="button" class="btn" style="padding: 5px 10px; margin-right: 5px;"
-            onclick="setDateRange('month')">This Month</button>
-        <button type="button" class="btn" style="padding: 5px 10px; margin-right: 5px;"
-            onclick="setDateRange('year')">This Year</button>
-        <button type="button" class="btn" style="padding: 5px 10px; background: #95a5a6;"
-            onclick="setDateRange('clear')">Clear</button>
+    <div class="filter-box">
+        <div class="quick-filters">
+            <button type="button" onclick="setDateRange('week')">This Week</button>
+            <button type="button" onclick="setDateRange('month')">This Month</button>
+            <button type="button" onclick="setDateRange('year')">This Year</button>
+            <button type="button" onclick="setDateRange('clear')">Clear</button>
+        </div>
+
+        <form method="GET" id="filter_form">
+            <div class="form-row mb-2">
+                <div class="form-group">
+                    <label>From</label>
+                    <input type="date" name="from" id="from_date" value="<?= $from ?>">
+                </div>
+                <div class="form-group">
+                    <label>To</label>
+                    <input type="date" name="to" id="to_date" value="<?= $to ?>">
+                </div>
+                <div class="form-group">
+                    <label>Type</label>
+                    <select name="type">
+                        <option value="">All</option>
+                        <option value="Income" <?= $type == 'Income' ? 'selected' : '' ?>>Income</option>
+                        <option value="Expense" <?= $type == 'Expense' ? 'selected' : '' ?>>Expense</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Account</label>
+                    <select name="account_id">
+                        <option value="">All</option>
+                        <?php while ($a = mysqli_fetch_assoc($accounts)) { ?>
+                            <option value="<?= $a['id'] ?>" <?= $account_id == $a['id'] ? 'selected' : '' ?>>
+                                <?= $a['account_name'] ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category_id">
+                        <option value="">All</option>
+                        <?php while ($c = mysqli_fetch_assoc($categories)) { ?>
+                            <option value="<?= $c['id'] ?>" <?= $category_id == $c['id'] ? 'selected' : '' ?>>
+                                <?= $c['category_name'] ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+                <button type="submit" class="btn">Filter</button>
+                <a href="export.php?format=pdf&from=<?= $from ?>&to=<?= $to ?>&type=<?= $type ?>"
+                    class="btn btn-danger btn-sm">Export PDF</a>
+                <a href="export.php?format=excel&from=<?= $from ?>&to=<?= $to ?>&type=<?= $type ?>"
+                    class="btn btn-success btn-sm">Export Excel</a>
+            </div>
+        </form>
     </div>
 
-    <form method="GET" id="filter_form"
-        style="margin-bottom:20px; display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end;">
-        <div>
-            <label>From:</label><br>
-            <input type="date" name="from" id="from_date" value="<?= $from ?>">
-        </div>
-        <div>
-            <label>To:</label><br>
-            <input type="date" name="to" id="to_date" value="<?= $to ?>">
-        </div>
-        <div>
-            <label>Type:</label><br>
-            <select name="type">
-                <option value="">All</option>
-                <option value="Income" <?= $type == 'Income' ? 'selected' : '' ?>>Income</option>
-                <option value="Expense" <?= $type == 'Expense' ? 'selected' : '' ?>>Expense</option>
-            </select>
-        </div>
-        <div>
-            <label>Account:</label><br>
-            <select name="account_id">
-                <option value="">All</option>
-                <?php while ($a = mysqli_fetch_assoc($accounts)) { ?>
-                    <option value="<?= $a['id'] ?>" <?= $account_id == $a['id'] ? 'selected' : '' ?>>
-                        <?= $a['account_name'] ?>
-                    </option>
-                <?php } ?>
-            </select>
-        </div>
-        <div>
-            <label>Category:</label><br>
-            <select name="category_id">
-                <option value="">All</option>
-                <?php while ($c = mysqli_fetch_assoc($categories)) { ?>
-                    <option value="<?= $c['id'] ?>" <?= $category_id == $c['id'] ? 'selected' : '' ?>>
-                        <?= $c['category_name'] ?>
-                    </option>
-                <?php } ?>
-            </select>
-        </div>
-
-        <div style="margin-top: 10px;">
-            <button type="submit" class="btn">Filter Database</button>
-            <a href="export.php?format=pdf&from=<?= $from ?>&to=<?= $to ?>&type=<?= $type ?>" class="btn"
-                style="background:#e74c3c;">Export PDF</a>
-            <a href="export.php?format=excel&from=<?= $from ?>&to=<?= $to ?>&type=<?= $type ?>" class="btn"
-                style="background:#27ae60;">Export Excel</a>
-        </div>
-    </form>
-
     <!-- SUMMARY CARDS -->
-    <div class="cards" style="justify-content: flex-start; gap:20px;">
+    <div class="cards">
         <div class="card total">
             <h3>Total Income (Filtered)</h3>
-            <p>₹
-                <?= number_format($total_income, 2) ?>
-            </p>
+            <p>₹ <?= number_format($total_income, 2) ?></p>
         </div>
-        <div class="card cash" style="border-left: 5px solid #e74c3c;">
+        <div class="card cash">
             <h3>Total Expense (Filtered)</h3>
-            <p>₹
-                <?= number_format($total_expense, 2) ?>
-            </p>
+            <p>₹ <?= number_format($total_expense, 2) ?></p>
         </div>
-        <div class="card bank" style="border-left: 5px solid #f1c40f;">
+        <div class="card bank">
             <h3>Net Balance</h3>
-            <p>₹
-                <?= number_format($net, 2) ?>
-            </p>
+            <p>₹ <?= number_format($net, 2) ?></p>
         </div>
     </div>
 
     <h3>Transactions History</h3>
 
-    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-        <tr style="background: #f4f4f4;">
-            <th style="padding: 10px; border: 1px solid #ddd;">Date</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Account</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Category</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Description</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Type</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Amount</th>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Account</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Amount</th>
         </tr>
 
         <?php if (count($rows) > 0) {
             foreach ($rows as $r) { ?>
                 <tr>
-                    <td style="padding: 10px; border: 1px solid #ddd;">
-                        <?= $r['transaction_date'] ?>
+                    <td><?= $r['transaction_date'] ?></td>
+                    <td><?= htmlspecialchars($r['account_name']) ?></td>
+                    <td><?= htmlspecialchars($r['category_name'] ?? '-') ?></td>
+                    <td><?= htmlspecialchars($r['description']) ?></td>
+                    <td>
+                        <span class="badge <?= $r['type'] == 'Income' ? 'badge-income' : 'badge-expense' ?>">
+                            <?= $r['type'] ?>
+                        </span>
                     </td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">
-                        <?= htmlspecialchars($r['account_name']) ?>
-                    </td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">
-                        <?= htmlspecialchars($r['category_name'] ?? '-') ?>
-                    </td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">
-                        <?= htmlspecialchars($r['description']) ?>
-                    </td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">
-                        <?= $r['type'] ?>
-                    </td>
-                    <td style="padding: 10px; border: 1px solid #ddd; color:<?= $r['type'] == 'Income' ? 'green' : 'red' ?>">
+                    <td class="<?= $r['type'] == 'Income' ? 'text-success' : 'text-danger' ?>">
                         ₹ <?= number_format($r['amount'], 2) ?>
                     </td>
                 </tr>
             <?php }
         } else { ?>
             <tr>
-                <td colspan="6" style="text-align:center; padding: 20px;">No transactions found for the selected criteria.
-                </td>
+                <td colspan="6" class="text-center text-muted">No transactions found for the selected criteria.</td>
             </tr>
         <?php } ?>
     </table>
