@@ -166,6 +166,7 @@ $transactions = mysqli_query($conn, "
             <th>Date</th>
             <th>Account</th>
             <th>Category</th>
+            <th>Description</th>
             <th>Type</th>
             <th>Amount</th>
         </tr>
@@ -174,6 +175,7 @@ $transactions = mysqli_query($conn, "
                 <td><?php echo $row['transaction_date']; ?></td>
                 <td><?php echo $row['account_name']; ?></td>
                 <td><?php echo $row['category_name']; ?></td>
+                <td><?php echo htmlspecialchars($row['description']); ?></td>
                 <td><?php echo $row['type']; ?></td>
                 <td style="color:<?php echo $row['type'] == 'Income' ? 'green' : 'red'; ?>">
                     ₹ <?php echo number_format($row['amount'], 2); ?>
