@@ -1144,42 +1144,460 @@ button:active,
 }
 
 /* ============================================================
-   RESPONSIVE
+   CLAMP-BASED RESPONSIVE TYPOGRAPHY
+   ============================================================ */
+h2 {
+    font-size: clamp(20px, 2.5vw, 26px);
+}
+
+h3 {
+    font-size: clamp(15px, 2vw, 17px);
+}
+
+.card p {
+    font-size: clamp(22px, 3vw, 30px);
+}
+
+.header-page-title {
+    font-size: clamp(15px, 2vw, 18px);
+}
+
+/* ============================================================
+   HAMBURGER MENU BUTTON
+   ============================================================ */
+.hamburger-btn {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    padding: 0;
+    box-shadow: none;
+    transition: all var(--transition-fast);
+}
+
+.hamburger-btn:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: none;
+    box-shadow: none;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 190;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+}
+
+/* ============================================================
+   FLOATING ACTION BUTTON (FAB)
+   ============================================================ */
+.fab {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    transition: all 0.3s ease;
+    z-index: 100;
+    text-decoration: none;
+    line-height: 1;
+}
+
+.fab:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+    color: white;
+}
+
+/* ============================================================
+   BUDGET PROGRESS
+   ============================================================ */
+.budget-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.budget-item {
+    margin-bottom: 20px;
+}
+
+.budget-item:last-child {
+    margin-bottom: 0;
+}
+
+.budget-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+}
+
+.budget-item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.budget-item-amounts {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.budget-item-amounts strong {
+    color: var(--text-main);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border-light);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+[data-theme="dark"] .progress-bar {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+    background: linear-gradient(90deg, var(--primary), #8b5cf6);
+}
+
+.progress-fill.warning {
+    background: linear-gradient(90deg, var(--warning), #f97316);
+}
+
+.progress-fill.danger {
+    background: linear-gradient(90deg, var(--danger), #f97171);
+}
+
+/* ============================================================
+   PROFILE PAGE
+   ============================================================ */
+.profile-avatar-upload {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 24px;
+}
+
+.profile-avatar-upload img,
+.profile-avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-avatar-placeholder {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 40px;
+    font-weight: 800;
+}
+
+.profile-avatar-upload label {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    border: 2px solid var(--surface);
+    margin: 0;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.profile-avatar-upload input[type="file"] {
+    display: none;
+}
+
+/* Header user avatar img */
+.header-user-avatar-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    background: var(--primary-light);
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.header-user:hover {
+    background: var(--primary-glow);
+    color: var(--primary);
+}
+
+.header-user-name {
+    display: inline;
+}
+
+/* ============================================================
+   TABLE SCROLL WRAPPER (mobile)
+   ============================================================ */
+.table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.table-scroll table {
+    border-radius: 0;
+    box-shadow: none;
+    margin-top: 0;
+    min-width: 600px;
+}
+
+/* ============================================================
+   EDIT LINK IN TABLES
+   ============================================================ */
+.action-link {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: var(--radius-xs);
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.action-link:hover {
+    background: var(--primary-light);
+    color: var(--primary-hover);
+}
+
+.action-link.danger {
+    color: var(--danger);
+}
+
+.action-link.danger:hover {
+    background: var(--danger-bg);
+    color: var(--danger);
+}
+
+/* ============================================================
+   RESPONSIVE — TABLET
+   ============================================================ */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 24px 20px;
+    }
+
+    .cards {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE
    ============================================================ */
 @media (max-width: 768px) {
     :root {
         --sidebar-width: 0px;
+        --header-height: 56px;
     }
 
+    /* Sidebar → slide-in overlay */
     .sidebar {
         transform: translateX(-100%);
+        width: 280px;
+        transition: transform 0.3s ease;
     }
 
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-overlay {
+        display: block;
+        pointer-events: none;
+    }
+
+    .sidebar-overlay.active {
+        pointer-events: auto;
+    }
+
+    /* Show hamburger */
+    .hamburger-btn {
+        display: flex;
+    }
+
+    /* Header full-width */
     .header {
         left: 0;
         padding: 0 16px;
     }
 
-    .main-content {
-        margin-left: 0;
-        padding: 20px 16px;
+    .header-page-title {
+        font-size: 15px;
     }
 
+    .header-user-name {
+        display: none;
+    }
+
+    /* Main content */
+    .main-content {
+        margin-left: 0;
+        padding: clamp(12px, 3vw, 20px) clamp(12px, 3vw, 16px);
+    }
+
+    /* Cards stack */
     .cards {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    /* Forms full-width */
+    form {
+        padding: 20px;
+        max-width: 100%;
     }
 
     .form-row {
         flex-direction: column;
     }
 
+    /* Tables scroll */
     table {
-        font-size: 13px;
+        font-size: clamp(12px, 1.5vw, 14px);
     }
 
     table th,
     table td {
-        padding: 10px 12px;
+        padding: clamp(8px, 1.5vw, 14px) clamp(10px, 2vw, 20px);
+    }
+
+    /* Action bar stack */
+    .action-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    /* Filter box */
+    .filter-box .form-row {
+        flex-direction: column;
+    }
+
+    .quick-filters {
+        gap: 6px;
+    }
+
+    .quick-filters button {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    /* FAB adjust */
+    .fab {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+
+    /* Chart containers */
+    .chart-container {
+        padding: 16px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — SMALL MOBILE
+   ============================================================ */
+@media (max-width: 480px) {
+    h2 {
+        font-size: 18px;
+    }
+
+    .card p {
+        font-size: 20px;
+    }
+
+    .header-right {
+        gap: 8px;
+    }
+
+    .theme-toggle {
+        width: 36px;
+        height: 36px;
+        font-size: 15px;
+    }
+
+    .btn {
+        padding: 9px 16px;
+        font-size: 13px;
     }
 }
 

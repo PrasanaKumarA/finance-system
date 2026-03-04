@@ -22,11 +22,16 @@ if ($role == "Admin") {
         <a href="add_account.php" class="btn">+ Add New Account</a>
     </div>
 
+    <?php if (isset($_GET['deleted'])) { ?>
+        <div class="alert alert-success">Account and all related transactions have been deleted.</div>
+    <?php } ?>
+
     <table>
         <tr>
             <th>Account Name</th>
             <th>Type</th>
             <th>Available Balance</th>
+            <th>Actions</th>
         </tr>
         <?php while ($row = mysqli_fetch_assoc($query)) {
             $balance = getAccountBalance($conn, $row['id']);
@@ -37,6 +42,13 @@ if ($role == "Admin") {
                 </td>
                 <td><?php echo $row['account_type']; ?></td>
                 <td>₹ <?php echo number_format($balance, 2); ?></td>
+                <td>
+                    <a href="account_details.php?id=<?php echo $row['id']; ?>" class="action-link">View</a>
+                    <a href="delete_account.php?id=<?php echo $row['id']; ?>" class="action-link danger"
+                        onclick="return confirm('⚠️ Delete this account?\n\nAll transactions linked to this account will also be permanently deleted. This cannot be undone.')">
+                        Delete
+                    </a>
+                </td>
             </tr>
         <?php } ?>
     </table>

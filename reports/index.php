@@ -184,17 +184,27 @@ $categories = mysqli_query($conn, "SELECT * FROM categories");
 <script>
     function setDateRange(range) {
         const today = new Date();
-        let fromDate = new Date();
-        let toDate = new Date();
+        let fromDate, toDate;
 
         if (range === 'week') {
-            const firstDay = today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1);
-            fromDate.setDate(firstDay);
+            // Monday of current week
+            fromDate = new Date(today);
+            const day = fromDate.getDay();
+            const diff = day === 0 ? 6 : day - 1; // Adjust for Monday start
+            fromDate.setDate(fromDate.getDate() - diff);
+            // Sunday of current week
+            toDate = new Date(fromDate);
+            toDate.setDate(toDate.getDate() + 6);
         } else if (range === 'month') {
-            fromDate.setDate(1);
+            // 1st of current month
+            fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            // Last day of current month
+            toDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
         } else if (range === 'year') {
-            fromDate.setMonth(0);
-            fromDate.setDate(1);
+            // Jan 1st
+            fromDate = new Date(today.getFullYear(), 0, 1);
+            // Dec 31st
+            toDate = new Date(today.getFullYear(), 11, 31);
         } else if (range === 'clear') {
             document.getElementById('from_date').value = '';
             document.getElementById('to_date').value = '';
@@ -202,8 +212,15 @@ $categories = mysqli_query($conn, "SELECT * FROM categories");
             return;
         }
 
-        document.getElementById('from_date').value = fromDate.toISOString().split('T')[0];
-        document.getElementById('to_date').value = toDate.toISOString().split('T')[0];
+        // Format to YYYY-MM-DD
+        function fmt(d) {
+            return d.getFullYear() + '-' +
+                String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                String(d.getDate()).padStart(2, '0');
+        }
+
+        document.getElementById('from_date').value = fmt(fromDate);
+        document.getElementById('to_date').value = fmt(toDate);
         document.getElementById('filter_form').submit();
     }
 </script>

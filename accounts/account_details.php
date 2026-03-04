@@ -60,6 +60,7 @@ $transactions = mysqli_query($conn, "
             <th>Description</th>
             <th>Type</th>
             <th>Amount</th>
+            <th>Action</th>
         </tr>
         <?php if (mysqli_num_rows($transactions) > 0) {
             while ($t = mysqli_fetch_assoc($transactions)) { ?>
@@ -75,11 +76,15 @@ $transactions = mysqli_query($conn, "
                     <td class="<?php echo $t['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
                         ₹ <?php echo number_format($t['amount'], 2); ?>
                     </td>
+                    <td>
+                        <a href="/finance-system/transactions/edit_transaction.php?id=<?php echo $t['id']; ?>"
+                            class="action-link">Edit</a>
+                    </td>
                 </tr>
             <?php }
         } else { ?>
             <tr>
-                <td colspan="5" class="text-center text-muted">No transactions found for this account.</td>
+                <td colspan="6" class="text-center text-muted">No transactions found for this account.</td>
             </tr>
         <?php } ?>
     </table>

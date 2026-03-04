@@ -29,6 +29,7 @@ $transactions = mysqli_query($conn, "
             <th>Description</th>
             <th>Type</th>
             <th>Amount</th>
+            <th>Action</th>
         </tr>
         <?php while ($row = mysqli_fetch_assoc($transactions)) { ?>
             <tr>
@@ -43,6 +44,9 @@ $transactions = mysqli_query($conn, "
                 </td>
                 <td class="<?php echo $row['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
                     ₹ <?php echo number_format($row['amount'], 2); ?>
+                </td>
+                <td>
+                    <a href="edit_transaction.php?id=<?php echo $row['id']; ?>" class="action-link">Edit</a>
                 </td>
             </tr>
         <?php } ?>

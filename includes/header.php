@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/finance-system/assets/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Apply saved theme instantly to prevent flash
         (function () {
             const saved = localStorage.getItem('finance-theme');
             if (saved) document.documentElement.setAttribute('data-theme', saved);
@@ -16,15 +15,33 @@
     </script>
 </head>
 
+<?php
+// Determine current page for sidebar active highlighting
+$current_file = basename($_SERVER['PHP_SELF']);
+$current_dir = basename(dirname($_SERVER['PHP_SELF']));
+
+// Load user profile data
+$profile_picture = null;
+$custom_system_name = null;
+if (isset($_SESSION['user_id'])) {
+    $profile_query = mysqli_query($conn, "SELECT profile_picture, system_name FROM users WHERE id = " . intval($_SESSION['user_id']));
+    if ($profile_query && $profile_row = mysqli_fetch_assoc($profile_query)) {
+        $profile_picture = $profile_row['profile_picture'];
+        $custom_system_name = $profile_row['system_name'];
+    }
+}
+$brand_name = $custom_system_name ?: 'FinanceHub';
+?>
+
 <body>
 
     <!-- SIDEBAR -->
-    <nav class="sidebar">
+    <nav class="sidebar" id="sidebar">
         <div class="sidebar-brand">
             <div class="sidebar-brand-icon">💎</div>
             <div class="sidebar-brand-text">
-                FinanceHub
-                <span>Management System</span>
+                <?php echo htmlspecialchars($brand_name); ?>
+                <span>Finance Management System</span>
             </div>
         </div>
 
@@ -32,8 +49,7 @@
             <div class="sidebar-section-label">Main Menu</div>
 
             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Admin') { ?>
-                <a href="/finance-system/admin/index.php"
-                    class="<?php echo basename($_SERVER['PHP_SELF']) == 'index.php' && strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'active' : ''; ?>">
+                <a href="/finance-system/admin/index.php" class="<?php echo $current_dir == 'admin' ? 'active' : ''; ?>">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z" />
@@ -43,7 +59,7 @@
             <?php } ?>
 
             <a href="/finance-system/index.php"
-                class="<?php echo basename($_SERVER['PHP_SELF']) == 'index.php' && strpos($_SERVER['PHP_SELF'], '/admin/') === false ? 'active' : ''; ?>">
+                class="<?php echo ($current_file == 'index.php' && $current_dir == 'finance-system') ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="7" height="9" />
@@ -57,7 +73,7 @@
             <div class="sidebar-section-label">Finance</div>
 
             <a href="/finance-system/accounts/view_accounts.php"
-                class="<?php echo strpos($_SERVER['PHP_SELF'], '/accounts/') !== false ? 'active' : ''; ?>">
+                class="<?php echo $current_dir == 'accounts' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="5" width="20" height="14" rx="2" />
@@ -67,7 +83,7 @@
             </a>
 
             <a href="/finance-system/categories/view_categories.php"
-                class="<?php echo strpos($_SERVER['PHP_SELF'], '/categories/') !== false ? 'active' : ''; ?>">
+                class="<?php echo $current_dir == 'categories' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="8" y1="6" x2="21" y2="6" />
@@ -81,7 +97,7 @@
             </a>
 
             <a href="/finance-system/transactions/add_transaction.php"
-                class="<?php echo strpos($_SERVER['PHP_SELF'], '/transactions/') !== false ? 'active' : ''; ?>">
+                class="<?php echo $current_dir == 'transactions' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
@@ -90,10 +106,20 @@
                 Transactions
             </a>
 
+            <a href="/finance-system/budgets/set_budget.php"
+                class="<?php echo $current_dir == 'budgets' ? 'active' : ''; ?>">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="1" x2="12" y2="23" />
+                    <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+                </svg>
+                Budgets
+            </a>
+
             <div class="sidebar-section-label">Analytics</div>
 
             <a href="/finance-system/reports/index.php"
-                class="<?php echo strpos($_SERVER['PHP_SELF'], '/reports/') !== false ? 'active' : ''; ?>">
+                class="<?php echo $current_dir == 'reports' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
@@ -119,12 +145,21 @@
         </div>
     </nav>
 
+    <!-- SIDEBAR OVERLAY (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- TOP HEADER BAR -->
     <header class="header">
         <div class="header-left">
-            <h1 class="header-page-title">
-                <?php echo isset($page_title) ? $page_title : 'Dashboard'; ?>
-            </h1>
+            <button class="hamburger-btn" id="hamburgerBtn" type="button" title="Toggle menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+            </button>
+            <h1 class="header-page-title"><?php echo isset($page_title) ? $page_title : 'Dashboard'; ?></h1>
         </div>
         <div class="header-right">
             <button class="theme-toggle" id="themeToggle" title="Toggle theme" type="button">
@@ -132,12 +167,15 @@
                 <span class="icon-moon">🌙</span>
             </button>
             <?php if (isset($_SESSION['name'])) { ?>
-                <div class="header-user">
-                    <div class="header-user-avatar">
-                        <?php echo strtoupper(substr($_SESSION['name'], 0, 1)); ?>
-                    </div>
-                    <?php echo htmlspecialchars($_SESSION['name']); ?>
-                </div>
+                <a href="/finance-system/profile.php" class="header-user" title="Profile settings">
+                    <?php if ($profile_picture && file_exists($_SERVER['DOCUMENT_ROOT'] . '/finance-system/' . $profile_picture)) { ?>
+                        <img class="header-user-avatar-img"
+                            src="/finance-system/<?php echo htmlspecialchars($profile_picture); ?>" alt="Profile">
+                    <?php } else { ?>
+                        <div class="header-user-avatar"><?php echo strtoupper(substr($_SESSION['name'], 0, 1)); ?></div>
+                    <?php } ?>
+                    <span class="header-user-name"><?php echo htmlspecialchars($_SESSION['name']); ?></span>
+                </a>
             <?php } ?>
         </div>
     </header>

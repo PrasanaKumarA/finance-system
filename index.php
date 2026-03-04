@@ -41,6 +41,38 @@ $monthly_expense = $expense_data['total_expense'] ?? 0;
 
 $net_profit = $monthly_income - $monthly_expense;
 
+/* ================= BUDGET OVERVIEW ================= */
+$budget_query = mysqli_query($conn, "
+    SELECT budget_amount FROM budgets
+    WHERE user_id = $user_id AND category_id IS NULL
+    AND month = $current_month AND year = $current_year
+");
+$monthly_budget = 0;
+if ($b_row = mysqli_fetch_assoc($budget_query)) {
+    $monthly_budget = $b_row['budget_amount'];
+}
+
+/* Category budgets for dashboard */
+$cat_budgets = mysqli_query($conn, "
+    SELECT c.category_name, b.budget_amount,
+           IFNULL((
+               SELECT SUM(t.amount)
+               FROM transactions t
+               WHERE t.category_id = c.id
+               AND t.user_id = $user_id
+               AND t.type = 'Expense'
+               AND MONTH(t.transaction_date) = $current_month
+               AND YEAR(t.transaction_date) = $current_year
+           ), 0) as spent
+    FROM budgets b
+    JOIN categories c ON b.category_id = c.id
+    WHERE b.user_id = $user_id
+    AND b.month = $current_month
+    AND b.year = $current_year
+    AND b.category_id IS NOT NULL
+    ORDER BY c.category_name
+");
+
 /* ================= CATEGORY PIE CHART ================= */
 $category_chart = mysqli_query($conn, "
     SELECT c.category_name, SUM(t.amount) as total
@@ -108,7 +140,10 @@ $transactions = mysqli_query($conn, "
 
 <div class="container">
 
-    <h2>Dashboard</h2>
+    <div class="action-bar">
+        <h2>Dashboard</h2>
+        <a href="budgets/set_budget.php" class="btn">📊 Set Budget</a>
+    </div>
 
     <!-- MAIN CARDS -->
     <div class="cards">
@@ -143,6 +178,56 @@ $transactions = mysqli_query($conn, "
         </div>
     </div>
 
+    <!-- BUDGET PROGRESS -->
+    <?php if ($monthly_budget > 0 || mysqli_num_rows($cat_budgets) > 0) { ?>
+        <div class="budget-card">
+            <div class="action-bar" style="margin-bottom: 12px;">
+                <h3 style="margin:0;">Budget Tracker</h3>
+                <a href="budgets/set_budget.php" class="action-link">Edit →</a>
+            </div>
+
+            <?php if ($monthly_budget > 0) {
+                $pct = round(($monthly_expense / $monthly_budget) * 100);
+                $bar_class = $pct > 100 ? 'danger' : ($pct > 75 ? 'warning' : '');
+                ?>
+                <div class="budget-item">
+                    <div class="budget-item-header">
+                        <span class="budget-item-name">Overall Monthly</span>
+                        <span class="budget-item-amounts">
+                            <strong>₹<?php echo number_format($monthly_expense, 2); ?></strong>
+                            / ₹<?php echo number_format($monthly_budget, 2); ?>
+                            (<?php echo min($pct, 999); ?>%)
+                        </span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill <?php echo $bar_class; ?>" style="width: <?php echo min($pct, 100); ?>%">
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+
+            <?php
+            mysqli_data_seek($cat_budgets, 0);
+            while ($cb = mysqli_fetch_assoc($cat_budgets)) {
+                $cpct = round(($cb['spent'] / $cb['budget_amount']) * 100);
+                $cbar = $cpct > 100 ? 'danger' : ($cpct > 75 ? 'warning' : '');
+                ?>
+                <div class="budget-item">
+                    <div class="budget-item-header">
+                        <span class="budget-item-name"><?php echo htmlspecialchars($cb['category_name']); ?></span>
+                        <span class="budget-item-amounts">
+                            <strong>₹<?php echo number_format($cb['spent'], 2); ?></strong>
+                            / ₹<?php echo number_format($cb['budget_amount'], 2); ?>
+                        </span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill <?php echo $cbar; ?>" style="width: <?php echo min($cpct, 100); ?>%"></div>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+    <?php } ?>
+
     <!-- PIE CHART -->
     <h3>Expense Distribution</h3>
 
@@ -161,7 +246,11 @@ $transactions = mysqli_query($conn, "
     </div>
 
     <!-- RECENT TRANSACTIONS -->
-    <h3 class="mt-3">Recent Transactions</h3>
+    <div class="action-bar mt-3">
+        <h3 style="margin:0;">Recent Transactions</h3>
+        <a href="transactions/view_transactions.php" class="action-link">See All →</a>
+    </div>
+
     <table>
         <tr>
             <th>Date</th>
@@ -170,6 +259,7 @@ $transactions = mysqli_query($conn, "
             <th>Description</th>
             <th>Type</th>
             <th>Amount</th>
+            <th>Action</th>
         </tr>
         <?php while ($row = mysqli_fetch_assoc($transactions)) { ?>
             <tr>
@@ -185,11 +275,17 @@ $transactions = mysqli_query($conn, "
                 <td class="<?php echo $row['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
                     ₹ <?php echo number_format($row['amount'], 2); ?>
                 </td>
+                <td>
+                    <a href="transactions/edit_transaction.php?id=<?php echo $row['id']; ?>" class="action-link">Edit</a>
+                </td>
             </tr>
         <?php } ?>
     </table>
 
 </div>
+
+<!-- FAB: Quick Add Transaction -->
+<a href="transactions/add_transaction.php" class="fab" title="Quick Add Transaction">+</a>
 
 <script>
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
