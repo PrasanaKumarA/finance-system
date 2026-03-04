@@ -10,5 +10,5 @@
 <body>
 
     <div class="header">
-        💰 Finance Management System
+        <span style="font-size: 28px;">💎</span> Finance Management System
     </div>

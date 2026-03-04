@@ -146,7 +146,7 @@ $transactions = mysqli_query($conn, "
     <h3>Expense Distribution</h3>
 
     <?php if (!empty($category_labels)) { ?>
-        <div style="background:white; padding:20px; border-radius:8px; margin-bottom:30px; width:400px; margin:auto;">
+        <div class="card" style="margin-bottom:30px; width:100%; max-width: 500px; margin: 0 auto 30px auto;">
             <canvas id="expenseChart"></canvas>
         </div>
     <?php } else { ?>
@@ -155,7 +155,7 @@ $transactions = mysqli_query($conn, "
 
     <!-- BAR CHART -->
     <h3>Income vs Expense (Last 6 Months)</h3>
-    <div style="background:white; padding:20px; border-radius:8px; margin-bottom:30px;">
+    <div class="card" style="margin-bottom:40px;">
         <canvas id="barChart" style="max-height:350px;"></canvas>
     </div>
 

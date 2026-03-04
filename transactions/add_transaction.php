@@ -22,22 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['ajax_action'])) {
         if ($from_account == $to_account) {
             $error_msg = "Cannot transfer to the same account.";
         } else {
-            // Deduct from source
             mysqli_query($conn, "INSERT INTO transactions 
             (user_id, account_id, type, amount, transaction_date, description)
             VALUES ($user_id, $from_account, 'Expense', $amount, '$date', 'Transfer Out to Account #$to_account - $desc')");
 
-            // Add to destination
             mysqli_query($conn, "INSERT INTO transactions 
             (user_id, account_id, type, amount, transaction_date, description)
             VALUES ($user_id, $to_account, 'Income', $amount, '$date', 'Transfer In from Account #$from_account - $desc')");
 
-            $success_msg = "Transfer Successful!";
+            $success_msg = "Transfer successfully recorded!";
         }
     } else {
         $account_id = $_POST['account_id'];
         $category_id = $_POST['category_id'] ?? 'NULL';
-
         if ($category_id === '')
             $category_id = 'NULL';
 
@@ -47,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['ajax_action'])) {
             VALUES 
             ($user_id, $account_id, $category_id, '$type', $amount, '$date', '$desc')
         ");
-        $success_msg = "Transaction Added Successfully!";
+        $success_msg = "Transaction successfully recorded!";
     }
 }
 
@@ -57,76 +54,82 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
 ?>
 
 <div class="container">
-    <h2>Add Transaction / Transfer</h2>
+    <h2>Record Transaction</h2>
 
     <?php if ($error_msg)
-        echo "<p style='color:red;'>$error_msg</p>"; ?>
+        echo "<p style='color: var(--danger); font-weight: 600; background: #fef2f2; padding: 12px; border-radius: 6px; border: 1px solid #fecaca;'>$error_msg</p>"; ?>
     <?php if ($success_msg)
-        echo "<p style='color:green;'>$success_msg</p>"; ?>
+        echo "<p style='color: var(--success); font-weight: 600; background: #ecfdf5; padding: 12px; border-radius: 6px; border: 1px solid #a7f3d0;'>$success_msg</p>"; ?>
 
-    <form method="POST">
+    <form method="POST" style="margin-top: 20px;">
 
-        <label>Type:</label><br>
-        <select name="type" id="type" required>
-            <option value="Income">Income</option>
-            <option value="Expense">Expense</option>
-            <option value="Transfer">Transfer</option>
-        </select><br><br>
+        <div style="display: flex; gap: 20px;">
+            <div style="flex: 1;">
+                <label>Transaction Type</label>
+                <select name="type" id="type" required>
+                    <option value="Income">Income</option>
+                    <option value="Expense">Expense</option>
+                    <option value="Transfer">Account Transfer</option>
+                </select>
+            </div>
+            <div style="flex: 1;">
+                <label>Date</label>
+                <input type="date" name="transaction_date" value="<?php echo date('Y-m-d'); ?>" required>
+            </div>
+        </div>
 
-        <label id="account_label">Account:</label><br>
+        <label id="account_label">Primary Account</label>
         <select name="account_id" id="account_id" required>
             <?php while ($row = mysqli_fetch_assoc($accounts)) { ?>
-                <option value="<?php echo $row['id']; ?>">
-                    <?php echo $row['account_name']; ?>
-                </option>
+                <option value="<?php echo $row['id']; ?>"><?php echo $row['account_name']; ?></option>
             <?php } ?>
-        </select><br><br>
+        </select>
 
-        <div id="transfer_fields" style="display:none;">
-            <label>To Account:</label><br>
+        <div id="transfer_fields" style="display:none; padding-top: 5px;">
+            <label>Destination Account</label>
             <select name="to_account_id" id="to_account_id">
                 <?php while ($row = mysqli_fetch_assoc($to_accounts)) { ?>
-                    <option value="<?php echo $row['id']; ?>">
-                        <?php echo $row['account_name']; ?>
-                    </option>
+                    <option value="<?php echo $row['id']; ?>"><?php echo $row['account_name']; ?></option>
                 <?php } ?>
-            </select><br><br>
+            </select>
         </div>
 
         <div id="category_section">
-            <label>Category:</label>
-            <span style="font-size: 0.9em; margin-left:10px; cursor: pointer; color: blue; text-decoration: underline;"
-                onclick="toggleAddCategory()">+ Add New Category</span><br>
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <label>Category</label>
+                <span style="font-size: 13px; cursor: pointer; color: var(--primary); font-weight: 500;"
+                    onclick="toggleAddCategory()">+ Quick Add Category</span>
+            </div>
 
             <div id="add_category_form"
-                style="display:none; background:#f9f9f9; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:4px;">
-                <input type="text" id="new_category_name" placeholder="Category Name" style="padding:5px;">
-                <button type="button" onclick="addNewCategory()" style="padding:5px;">Save</button>
-                <span id="cat_msg" style="margin-left: 10px;"></span>
+                style="display:none; background: #f8fafc; padding: 15px; margin-bottom: 20px; border: 1px dashed var(--primary); border-radius: var(--radius-sm);">
+                <label style="font-size: 13px;">New Category Name</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="new_category_name" placeholder="Category Name" style="margin-bottom: 0;">
+                    <button type="button" onclick="addNewCategory()" class="btn btn-primary"
+                        style="padding: 10px 15px;">Add</button>
+                </div>
+                <span id="cat_msg" style="display:block; margin-top:5px; font-size:13px;"></span>
             </div>
 
             <select name="category_id" id="category">
-                <option value="">-- Select Category --</option>
+                <option value="">-- Specify Category (Optional) --</option>
                 <?php
                 mysqli_data_seek($categories, 0);
                 while ($cat = mysqli_fetch_assoc($categories)) { ?>
                     <option value="<?php echo $cat['id']; ?>" data-type="<?php echo $cat['type']; ?>">
-                        <?php echo $cat['category_name']; ?>
-                    </option>
+                        <?php echo $cat['category_name']; ?></option>
                 <?php } ?>
-            </select><br><br>
+            </select>
         </div>
 
-        <label>Amount:</label><br>
-        <input type="number" step="0.01" name="amount" required><br><br>
+        <label>Amount (₹)</label>
+        <input type="number" step="0.01" name="amount" placeholder="0.00" required>
 
-        <label>Date:</label><br>
-        <input type="date" name="transaction_date" value="<?php echo date('Y-m-d'); ?>" required><br><br>
+        <label>Description / Notes</label>
+        <input type="text" name="description" placeholder="Optional notes...">
 
-        <label>Description:</label><br>
-        <input type="text" name="description"><br><br>
-
-        <button type="submit" class="btn">Save Transaction</button>
+        <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">Save Transaction</button>
 
     </form>
 </div>
@@ -137,21 +140,19 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
     const categorySelect = document.getElementById("category");
     const transferFields = document.getElementById("transfer_fields");
     const accountLabel = document.getElementById("account_label");
-    const toAccountSelect = document.getElementById("to_account_id");
 
     function updateFormVisibility() {
         const selectedType = typeSelect.value;
-
         if (selectedType === 'Transfer') {
             categorySection.style.display = 'none';
             transferFields.style.display = 'block';
-            accountLabel.innerText = 'From Account:';
+            accountLabel.innerText = 'Source Account';
             categorySelect.removeAttribute('required');
         } else {
             categorySection.style.display = 'block';
             transferFields.style.display = 'none';
-            accountLabel.innerText = 'Account:';
-            categorySelect.setAttribute('required', 'required');
+            accountLabel.innerText = 'Primary Account';
+            // Category isn't strictly globally required unless logic dictates it
             filterCategories();
         }
     }
@@ -160,20 +161,14 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
         const selectedType = typeSelect.value;
         const options = categorySelect.options;
 
-        let firstVisible = -1;
         for (let i = 0; i < options.length; i++) {
-            if (options[i].value === "") {
-                continue; // Always show placeholder
-            }
-
+            if (options[i].value === "") continue;
             if (options[i].getAttribute("data-type") === selectedType) {
                 options[i].style.display = "block";
-                if (firstVisible === -1) firstVisible = i;
             } else {
                 options[i].style.display = "none";
             }
         }
-
         categorySelect.value = "";
     }
 
@@ -190,50 +185,40 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
 
         if (!name) {
             msgSpan.innerText = "Name is required";
-            msgSpan.style.color = "red";
+            msgSpan.style.color = "var(--danger)";
             return;
         }
 
-        if (type === 'Transfer') {
-            msgSpan.innerText = "Cannot add category for transfer";
-            msgSpan.style.color = "red";
-            return;
-        }
+        if (type === 'Transfer') return;
 
         msgSpan.innerText = "Saving...";
-        msgSpan.style.color = "blue";
+        msgSpan.style.color = "var(--primary)";
 
         const formData = new FormData();
         formData.append('category_name', name);
         formData.append('type', type);
 
-        fetch('../categories/api_add_category.php', {
-            method: 'POST',
-            body: formData
-        })
+        fetch('../categories/api_add_category.php', { method: 'POST', body: formData })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Add to dropdown
                     const newOption = document.createElement("option");
                     newOption.value = data.id;
                     newOption.text = data.category_name;
                     newOption.setAttribute("data-type", data.type);
                     categorySelect.add(newOption);
 
-                    // Select and hide form
                     categorySelect.value = data.id;
                     nameInput.value = "";
                     toggleAddCategory();
                     msgSpan.innerText = "";
                 } else {
                     msgSpan.innerText = data.error;
-                    msgSpan.style.color = "red";
+                    msgSpan.style.color = "var(--danger)";
                 }
-            })
-            .catch(err => {
+            }).catch(err => {
                 msgSpan.innerText = "Error saving category.";
-                msgSpan.style.color = "red";
+                msgSpan.style.color = "var(--danger)";
             });
     }
 
