@@ -112,7 +112,7 @@ $cat_count = mysqli_num_rows($categories);
 <div class="container">
     <div class="action-bar">
         <h2>Budget Management — <?php echo date('F Y'); ?></h2>
-        <a href="/finance-system/index.php" class="btn btn-secondary">← Back</a>
+        <a href="<?php echo BASE_PATH; ?>/index.php" class="btn btn-secondary">← Back</a>
     </div>
 
     <?php if ($success_msg) { ?>

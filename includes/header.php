@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finance System</title>
-    <link rel="stylesheet" href="/finance-system/assets/css/style.css">
+    <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/assets/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         (function () {
@@ -31,6 +31,7 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 $brand_name = $custom_system_name ?: 'FinanceHub';
+$bp = BASE_PATH;
 ?>
 
 <body>
@@ -49,7 +50,7 @@ $brand_name = $custom_system_name ?: 'FinanceHub';
             <div class="sidebar-section-label">Main Menu</div>
 
             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Admin') { ?>
-                <a href="/finance-system/admin/index.php" class="<?php echo $current_dir == 'admin' ? 'active' : ''; ?>">
+                <a href="<?php echo $bp; ?>/admin/index.php" class="<?php echo $current_dir == 'admin' ? 'active' : ''; ?>">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z" />
@@ -58,8 +59,8 @@ $brand_name = $custom_system_name ?: 'FinanceHub';
                 </a>
             <?php } ?>
 
-            <a href="/finance-system/index.php"
-                class="<?php echo ($current_file == 'index.php' && $current_dir == 'finance-system') ? 'active' : ''; ?>">
+            <a href="<?php echo $bp; ?>/index.php"
+                class="<?php echo ($current_file == 'index.php' && ($current_dir == 'finance-system' || $current_dir == 'htdocs')) ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="7" height="9" />
@@ -72,7 +73,7 @@ $brand_name = $custom_system_name ?: 'FinanceHub';
 
             <div class="sidebar-section-label">Finance</div>
 
-            <a href="/finance-system/accounts/view_accounts.php"
+            <a href="<?php echo $bp; ?>/accounts/view_accounts.php"
                 class="<?php echo $current_dir == 'accounts' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -82,7 +83,7 @@ $brand_name = $custom_system_name ?: 'FinanceHub';
                 Accounts
             </a>
 
-            <a href="/finance-system/categories/view_categories.php"
+            <a href="<?php echo $bp; ?>/categories/view_categories.php"
                 class="<?php echo $current_dir == 'categories' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -96,7 +97,7 @@ $brand_name = $custom_system_name ?: 'FinanceHub';
                 Categories
             </a>
 
-            <a href="/finance-system/transactions/add_transaction.php"
+            <a href="<?php echo $bp; ?>/transactions/add_transaction.php"
                 class="<?php echo $current_dir == 'transactions' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -106,7 +107,7 @@ $brand_name = $custom_system_name ?: 'FinanceHub';
                 Transactions
             </a>
 
-            <a href="/finance-system/budgets/set_budget.php"
+            <a href="<?php echo $bp; ?>/budgets/set_budget.php"
                 class="<?php echo $current_dir == 'budgets' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -118,7 +119,7 @@ $brand_name = $custom_system_name ?: 'FinanceHub';
 
             <div class="sidebar-section-label">Analytics</div>
 
-            <a href="/finance-system/reports/index.php"
+            <a href="<?php echo $bp; ?>/reports/index.php"
                 class="<?php echo $current_dir == 'reports' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -133,7 +134,7 @@ $brand_name = $custom_system_name ?: 'FinanceHub';
         </div>
 
         <div class="sidebar-bottom">
-            <a href="/finance-system/logout.php">
+            <a href="<?php echo $bp; ?>/logout.php">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
@@ -167,10 +168,10 @@ $brand_name = $custom_system_name ?: 'FinanceHub';
                 <span class="icon-moon">🌙</span>
             </button>
             <?php if (isset($_SESSION['name'])) { ?>
-                <a href="/finance-system/profile.php" class="header-user" title="Profile settings">
-                    <?php if ($profile_picture && file_exists($_SERVER['DOCUMENT_ROOT'] . '/finance-system/' . $profile_picture)) { ?>
+                <a href="<?php echo $bp; ?>/profile.php" class="header-user" title="Profile settings">
+                    <?php if ($profile_picture && file_exists($_SERVER['DOCUMENT_ROOT'] . $bp . '/' . $profile_picture)) { ?>
                         <img class="header-user-avatar-img"
-                            src="/finance-system/<?php echo htmlspecialchars($profile_picture); ?>" alt="Profile">
+                            src="<?php echo $bp; ?>/<?php echo htmlspecialchars($profile_picture); ?>" alt="Profile">
                     <?php } else { ?>
                         <div class="header-user-avatar"><?php echo strtoupper(substr($_SESSION['name'], 0, 1)); ?></div>
                     <?php } ?>

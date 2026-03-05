@@ -80,7 +80,7 @@ $transactions = mysqli_query($conn, "
                         ₹ <?php echo number_format($t['amount'], 2); ?>
                     </td>
                     <td>
-                        <a href="/finance-system/transactions/edit_transaction.php?id=<?php echo $t['id']; ?>"
+                        <a href="<?php echo BASE_PATH; ?>/transactions/edit_transaction.php?id=<?php echo $t['id']; ?>"
                             class="action-link">Edit</a>
                     </td>
                 </tr>

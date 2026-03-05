@@ -1,0 +1,11 @@
+DirectoryIndex index.php
+
+RewriteEngine On
+
+# Redirect to index.php if no specific file is requested
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^$ index.php [L]
+
+# Prevent directory listing
+Options -Indexes

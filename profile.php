@@ -63,7 +63,7 @@ $user = mysqli_fetch_assoc($user_query);
 <div class="container">
     <div class="action-bar">
         <h2>Profile Settings</h2>
-        <a href="/finance-system/index.php" class="btn btn-secondary">← Back</a>
+        <a href="<?php echo BASE_PATH; ?>/index.php" class="btn btn-secondary">← Back</a>
     </div>
 
     <?php if ($success_msg) { ?>
@@ -81,7 +81,7 @@ $user = mysqli_fetch_assoc($user_query);
 
         <div class="profile-avatar-upload">
             <?php if ($user['profile_picture'] && file_exists(__DIR__ . '/' . $user['profile_picture'])) { ?>
-                <img src="/finance-system/<?php echo htmlspecialchars($user['profile_picture']); ?>" alt="Profile">
+                <img src="<?php echo BASE_PATH; ?>/<?php echo htmlspecialchars($user['profile_picture']); ?>" alt="Profile">
             <?php } else { ?>
                 <div class="profile-avatar-placeholder">
                     <?php echo strtoupper(substr($user['name'], 0, 1)); ?>

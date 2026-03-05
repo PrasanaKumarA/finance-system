@@ -21,7 +21,7 @@ $expense_count = mysqli_num_rows($expense_cats);
             <p class="page-subtitle">Organize your income and expense categories</p>
         </div>
         <div class="flex gap-2">
-            <a href="/finance-system/index.php" class="btn btn-secondary">← Back</a>
+            <a href="<?php echo BASE_PATH; ?>/index.php" class="btn btn-secondary">← Back</a>
             <a href="add_category.php" class="btn">+ Add Category</a>
         </div>
     </div>
