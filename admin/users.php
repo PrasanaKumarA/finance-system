@@ -2,6 +2,7 @@
 include "../includes/auth.php";
 include "../includes/db.php";
 include "admin_auth.php";
+include "../categories/init_defaults.php";
 $page_title = "Manage Users";
 include "../includes/header.php";
 include "../includes/navbar.php";
@@ -34,6 +35,11 @@ if (isset($_POST['add_user'])) {
             ");
             $stmt->bind_param("ssss", $name, $username, $hashed_password, $role);
             $stmt->execute();
+
+            // Seed default categories for the new user
+            $new_user_id = $conn->insert_id;
+            seed_default_categories($conn, $new_user_id);
+
             $stmt->close();
 
             $success = "User added successfully!";

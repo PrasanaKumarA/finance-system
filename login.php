@@ -28,6 +28,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['role'] = $user['role'];
                 $_SESSION['name'] = $user['name'];
 
+                // Seed default categories for existing users who have none
+                require_once __DIR__ . "/categories/init_defaults.php";
+                seed_default_categories($conn, $user['id']);
+
                 header("Location: index.php");
                 exit;
 
