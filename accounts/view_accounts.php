@@ -9,11 +9,9 @@ include "../includes/navbar.php";
 $user_id = $_SESSION['user_id'];
 $role = $_SESSION['role'];
 
-if ($role == "Admin") {
-    $query = mysqli_query($conn, "SELECT * FROM accounts");
-} else {
-    $query = mysqli_query($conn, "SELECT * FROM accounts WHERE user_id=$user_id");
-}
+// Admins should only see their own accounts here. 
+// Global views are isolated in the Admin Panel.
+$query = mysqli_query($conn, "SELECT * FROM accounts WHERE user_id=$user_id");
 
 $type_icons = [
     'Bank' => '🏦',

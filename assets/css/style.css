@@ -1,110 +1,110 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 /* ============================================================
    LIGHT THEME (Default)
    ============================================================ */
 :root {
-    --primary: #6366f1;
-    --primary-hover: #4f46e5;
-    --primary-light: rgba(99, 102, 241, 0.1);
-    --primary-glow: rgba(99, 102, 241, 0.25);
-    --secondary: #ec4899;
-    --background: #f0f2f5;
-    --surface: #ffffff;
-    --surface-hover: #f8fafc;
-    --sidebar-bg: #1e1b4b;
-    --sidebar-text: rgba(255, 255, 255, 0.7);
-    --sidebar-text-hover: #ffffff;
-    --sidebar-active-bg: rgba(255, 255, 255, 0.12);
-    --sidebar-border: rgba(255, 255, 255, 0.08);
-    --header-bg: #ffffff;
-    --header-border: #e5e7eb;
-    --text-main: #111827;
-    --text-secondary: #374151;
-    --text-muted: #6b7280;
-    --text-light: #9ca3af;
-    --border: #e5e7eb;
-    --border-light: #f3f4f6;
-    --success: #10b981;
-    --success-bg: #ecfdf5;
-    --success-border: #a7f3d0;
-    --danger: #ef4444;
-    --danger-bg: #fef2f2;
-    --danger-border: #fecaca;
-    --warning: #f59e0b;
-    --warning-bg: #fffbeb;
-    --warning-border: #fed7aa;
-    --info: #3b82f6;
-    --radius-xl: 20px;
-    --radius-lg: 14px;
-    --radius-md: 10px;
+    --primary: #4F46E5;
+    --primary-hover: #4338CA;
+    --primary-light: #EEF2FF;
+    --primary-glow: rgba(79, 70, 229, 0.4);
+    --secondary: #F43F5E;
+    --background: #F8FAFC;
+    --surface: #FFFFFF;
+    --surface-hover: #F8FAFC;
+    --sidebar-bg: #FFFFFF;
+    --sidebar-text: #64748B;
+    --sidebar-text-hover: #0F172A;
+    --sidebar-active-bg: #EEF2FF;
+    --sidebar-border: #E2E8F0;
+    --header-bg: rgba(255, 255, 255, 0.85);
+    --header-border: #E2E8F0;
+    --text-main: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    --text-light: #94A3B8;
+    --border: #E2E8F0;
+    --border-light: #F1F5F9;
+    --success: #10B981;
+    --success-bg: #ECFDF5;
+    --success-border: #A7F3D0;
+    --danger: #EF4444;
+    --danger-bg: #FEF2F2;
+    --danger-border: #FECACA;
+    --warning: #F59E0B;
+    --warning-bg: #FFFBEB;
+    --warning-border: #FED7AA;
+    --info: #3B82F6;
+    --radius-xl: 24px;
+    --radius-lg: 16px;
+    --radius-md: 12px;
     --radius-sm: 8px;
     --radius-xs: 6px;
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
-    --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
-    --input-bg: #f9fafb;
-    --input-border: #d1d5db;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    --shadow-glow: 0 0 25px rgba(79, 70, 229, 0.25);
+    --input-bg: #FFFFFF;
+    --input-border: #CBD5E1;
     --input-focus-border: var(--primary);
-    --input-focus-ring: rgba(99, 102, 241, 0.2);
-    --table-header-bg: #f9fafb;
-    --table-row-hover: #f3f4f6;
-    --sidebar-width: 260px;
-    --header-height: 64px;
+    --input-focus-ring: rgba(79, 70, 229, 0.2);
+    --table-header-bg: #F8FAFC;
+    --table-row-hover: #F1F5F9;
+    --sidebar-width: 280px;
+    --header-height: 72px;
     --transition-fast: 0.15s ease;
     --transition-med: 0.25s ease;
-    --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ============================================================
    DARK THEME
    ============================================================ */
 [data-theme="dark"] {
-    --primary: #818cf8;
-    --primary-hover: #6366f1;
-    --primary-light: rgba(129, 140, 248, 0.12);
-    --primary-glow: rgba(129, 140, 248, 0.2);
-    --background: #0f172a;
-    --surface: #1e293b;
-    --surface-hover: #273548;
-    --sidebar-bg: #0c1222;
-    --sidebar-text: rgba(255, 255, 255, 0.55);
-    --sidebar-text-hover: #ffffff;
-    --sidebar-active-bg: rgba(129, 140, 248, 0.15);
-    --sidebar-border: rgba(255, 255, 255, 0.06);
-    --header-bg: #1e293b;
-    --header-border: #334155;
-    --text-main: #f1f5f9;
-    --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
-    --text-light: #64748b;
-    --border: #334155;
-    --border-light: #1e293b;
-    --success: #34d399;
-    --success-bg: rgba(52, 211, 153, 0.1);
-    --success-border: rgba(52, 211, 153, 0.2);
-    --danger: #f87171;
-    --danger-bg: rgba(248, 113, 113, 0.1);
-    --danger-border: rgba(248, 113, 113, 0.2);
-    --warning: #fbbf24;
-    --warning-bg: rgba(251, 191, 36, 0.1);
-    --warning-border: rgba(251, 191, 36, 0.2);
-    --info: #60a5fa;
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
-    --shadow-glow: 0 0 20px rgba(129, 140, 248, 0.1);
-    --input-bg: #0f172a;
-    --input-border: #475569;
+    --primary: #6366F1;
+    --primary-hover: #818CF8;
+    --primary-light: rgba(99, 102, 241, 0.15);
+    --primary-glow: rgba(99, 102, 241, 0.3);
+    --background: #09090B;
+    --surface: #18181B;
+    --surface-hover: #27272A;
+    --sidebar-bg: #09090B;
+    --sidebar-text: #A1A1AA;
+    --sidebar-text-hover: #FAFAFA;
+    --sidebar-active-bg: #27272A;
+    --sidebar-border: #27272A;
+    --header-bg: rgba(9, 9, 11, 0.85);
+    --header-border: #27272A;
+    --text-main: #FAFAFA;
+    --text-secondary: #E4E4E7;
+    --text-muted: #A1A1AA;
+    --text-light: #71717A;
+    --border: #27272A;
+    --border-light: #18181B;
+    --success: #10B981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --success-border: rgba(16, 185, 129, 0.2);
+    --danger: #EF4444;
+    --danger-bg: rgba(239, 68, 68, 0.1);
+    --danger-border: rgba(239, 68, 68, 0.2);
+    --warning: #F59E0B;
+    --warning-bg: rgba(245, 158, 11, 0.1);
+    --warning-border: rgba(245, 158, 11, 0.2);
+    --info: #3B82F6;
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.6), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.7), 0 4px 6px -2px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 10px 10px -5px rgba(0, 0, 0, 0.6);
+    --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+    --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.15);
+    --input-bg: #09090B;
+    --input-border: #27272A;
     --input-focus-border: var(--primary);
-    --input-focus-ring: rgba(129, 140, 248, 0.25);
-    --table-header-bg: #172033;
-    --table-row-hover: #273548;
+    --input-focus-ring: rgba(99, 102, 241, 0.25);
+    --table-header-bg: #18181B;
+    --table-row-hover: #27272A;
 }
 
 /* ============================================================
@@ -123,7 +123,7 @@ html {
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background-color: var(--background);
     color: var(--text-main);
     line-height: 1.6;
@@ -131,6 +131,7 @@ body {
     transition: background-color var(--transition-slow), color var(--transition-slow);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
 
 /* ============================================================
@@ -162,15 +163,16 @@ body {
 }
 
 .sidebar-brand-icon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #4F46E5, #EC4899);
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 22px;
     flex-shrink: 0;
+    box-shadow: var(--shadow-glow);
 }
 
 .sidebar-brand-text {
@@ -227,8 +229,9 @@ body {
 }
 
 .sidebar-nav a.active {
-    color: #ffffff;
+    color: var(--primary);
     background: var(--sidebar-active-bg);
+    font-weight: 600;
 }
 
 .sidebar-nav a.active::before {
@@ -588,21 +591,22 @@ table {
     background: var(--surface);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
-    overflow: hidden;
     margin-top: 8px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 table th {
     background: var(--table-header-bg);
     color: var(--text-muted);
-    padding: 14px 20px;
-    font-weight: 600;
-    font-size: 12px;
+    padding: 16px 24px;
+    font-weight: 700;
+    font-size: 13px;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     text-align: left;
     border-bottom: 1px solid var(--border);
-    white-space: nowrap;
 }
 
 table td {
