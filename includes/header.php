@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" href="<?php echo BASE_PATH; ?>/assets/images/favi.JPG">
     <link rel="manifest" href="<?php echo BASE_PATH; ?>/manifest.json">
     <meta name="theme-color" content="#4F46E5">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/assets/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

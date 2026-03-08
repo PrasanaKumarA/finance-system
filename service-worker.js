@@ -1,4 +1,4 @@
-const CACHE_NAME = 'financehub-cache-v2';
+const CACHE_NAME = 'financehub-cache-v3';
 const urlsToCache = [
     '/finance-system/',
     '/finance-system/index.php',
@@ -11,7 +11,20 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                return cache.addAll(urlsToCache);
+                console.log('Opened cache');
+                // Use Promise.allSettled or catch individual so one failure doesn't block the rest
+                return Promise.allSettled(
+                    urlsToCache.map(url => {
+                        return fetch(new Request(url, { cache: 'reload' }))
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`Request failed for ${url}`);
+                                }
+                                return cache.put(url, response);
+                            })
+                            .catch(error => console.error('Failed to cache:', url, error));
+                    })
+                );
             })
     );
 });
