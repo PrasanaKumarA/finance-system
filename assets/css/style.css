@@ -145,6 +145,7 @@ body {
     left: 0;
     width: var(--sidebar-width);
     height: 100vh;
+    height: 100dvh;
     background: var(--sidebar-bg);
     display: flex;
     flex-direction: column;
@@ -260,8 +261,37 @@ body {
 }
 
 .sidebar-bottom {
-    padding: 16px 12px;
+    padding: 16px 12px calc(16px + env(safe-area-inset-bottom)) 12px;
     border-top: 1px solid var(--sidebar-border);
+}
+
+.sidebar-bottom a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.sidebar-bottom a:hover {
+    color: var(--danger);
+    background: var(--danger-bg);
+}
+
+.sidebar-bottom a svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+
+.sidebar-bottom a:hover svg {
+    opacity: 1;
 }
 
 /* --- Top Header Bar --- */
