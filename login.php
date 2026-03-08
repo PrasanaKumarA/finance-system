@@ -60,7 +60,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login — FinanceHub</title>
     <link rel="icon" type="image/jpeg" href="<?php echo BASE_PATH; ?>/assets/images/favi.JPG">
+    <link rel="apple-touch-icon" href="<?php echo BASE_PATH; ?>/assets/images/favi.JPG">
+    <link rel="manifest" href="<?php echo BASE_PATH; ?>/manifest.json">
+    <meta name="theme-color" content="#4F46E5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/assets/css/style.css">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('<?php echo BASE_PATH; ?>/service-worker.js');
+            });
+        }
+    </script>
     <script>
         (function () {
             const saved = localStorage.getItem('finance-theme');
