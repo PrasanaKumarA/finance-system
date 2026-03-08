@@ -554,7 +554,7 @@ hr {
 
 .card.total h3,
 .card.total p {
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
 .card.total::before {
@@ -568,7 +568,7 @@ hr {
 
 .card.bank h3,
 .card.bank p {
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
 .card.bank::before {
@@ -582,7 +582,7 @@ hr {
 
 .card.cash h3,
 .card.cash p {
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
 .card.cash::before {
@@ -596,7 +596,7 @@ hr {
 
 .card.danger h3,
 .card.danger p {
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
 .card.danger::before {
