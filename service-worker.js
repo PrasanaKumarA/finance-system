@@ -1,4 +1,4 @@
-const CACHE_NAME = 'financehub-cache-v1';
+const CACHE_NAME = 'financehub-cache-v2';
 const urlsToCache = [
     '/finance-system/',
     '/finance-system/index.php',
@@ -18,14 +18,15 @@ self.addEventListener('install', event => {
 
 self.addEventListener('fetch', event => {
     event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                if (response) {
-                    return response;
-                }
-                return fetch(event.request).catch(() => {
-                    // If offline and request fails, we could return a fallback page here
+        fetch(event.request)
+            .then(networkResponse => {
+                return caches.open(CACHE_NAME).then(cache => {
+                    cache.put(event.request, networkResponse.clone());
+                    return networkResponse;
                 });
+            })
+            .catch(() => {
+                return caches.match(event.request);
             })
     );
 });

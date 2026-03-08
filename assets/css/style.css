@@ -1606,7 +1606,7 @@ h3 {
 
     .login-box {
         padding: 32px 24px;
-        margin: 16px;
+        width: 100%;
     }
 
     .login-box h2 {
