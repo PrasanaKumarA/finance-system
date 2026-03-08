@@ -1094,6 +1094,15 @@ button:active,
     }
 }
 
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+    max-width: 420px;
+    z-index: 10;
+}
+
 .login-box {
     background: var(--surface);
     padding: 48px 40px;
@@ -1171,9 +1180,7 @@ button:active,
 }
 
 .login-theme-toggle {
-    position: fixed;
-    top: 24px;
-    right: 24px;
+    margin-bottom: 16px;
     z-index: 10;
 }
 

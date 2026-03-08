@@ -82,33 +82,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body class="login-page">
 
-    <div class="login-theme-toggle">
-        <button class="theme-toggle" id="themeToggle" title="Toggle theme" type="button">
-            <span class="icon-sun">☀️</span>
-            <span class="icon-moon">🌙</span>
-        </button>
-    </div>
-
-    <div class="login-box">
-        <div class="login-brand">
-            <div class="login-brand-icon">💎</div>
-            <h2>FinanceHub</h2>
-            <p class="login-subtitle">Sign in to manage your finances</p>
+    <div class="login-wrapper">
+        <div class="login-theme-toggle">
+            <button class="theme-toggle" id="themeToggle" title="Toggle theme" type="button">
+                <span class="icon-sun">☀️</span>
+                <span class="icon-moon">🌙</span>
+            </button>
         </div>
 
-        <?php if (!empty($error)) { ?>
-            <div class="error"><?= htmlspecialchars($error) ?></div>
-        <?php } ?>
+        <div class="login-box">
+            <div class="login-brand">
+                <div class="login-brand-icon">💎</div>
+                <h2>FinanceHub</h2>
+                <p class="login-subtitle">Sign in to manage your finances</p>
+            </div>
 
-        <form method="POST">
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Enter your username" required>
+            <?php if (!empty($error)) { ?>
+                <div class="error"><?= htmlspecialchars($error) ?></div>
+            <?php } ?>
 
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Enter your password" required>
+            <form method="POST">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter your username" required>
 
-            <button type="submit">Sign In</button>
-        </form>
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
     </div>
 
     <script>
