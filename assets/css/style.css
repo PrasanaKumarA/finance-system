@@ -2031,6 +2031,10 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
     .mobile-bottom-nav {
         display: none !important;
     }
+
+    .mobile-sidebar {
+        display: none !important;
+    }
 }
 
 /* Mobile overrides */
@@ -2807,4 +2811,217 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
     .desktop-accounts {
         display: none !important;
     }
+
+    .desktop-reports {
+        display: none !important;
+    }
+}
+
+/* ===== Mobile Analysis Page ===== */
+@media (min-width: 769px) {
+    .mobile-analysis {
+        display: none !important;
+    }
+}
+
+.mobile-analysis {
+    padding: 20px 16px;
+    padding-bottom: 90px;
+}
+
+.ma-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.ma-header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0;
+    color: var(--text-main);
+}
+
+.ma-export-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.ma-export-btn:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* Period Tabs */
+.ma-tabs {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 4px;
+    margin-bottom: 16px;
+    gap: 2px;
+}
+
+.ma-tab {
+    flex: 1;
+    padding: 10px 8px;
+    border: none;
+    background: transparent;
+    border-radius: 26px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    box-shadow: none;
+}
+
+.ma-tab:hover {
+    color: var(--text-main);
+    transform: none;
+    box-shadow: none;
+}
+
+.ma-tab.active {
+    background: var(--text-muted);
+    color: var(--background);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .ma-tab.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-main);
+}
+
+/* Month/Period Navigator */
+.ma-month-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 12px;
+}
+
+.ma-nav-arrow {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: none;
+    flex-shrink: 0;
+}
+
+.ma-nav-arrow:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    transform: none;
+    box-shadow: none;
+}
+
+.ma-period-label {
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-main);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 16px;
+}
+
+/* Custom Date Range */
+.ma-custom-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.ma-date-input {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    color: var(--text-main);
+    font-size: 14px;
+}
+
+/* Summary Cards */
+.ma-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.ma-summary-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 12px;
+    text-align: center;
+}
+
+.ma-summary-item.income {
+    border-left: 3px solid #10b981;
+}
+
+.ma-summary-item.expense {
+    border-left: 3px solid #ef4444;
+}
+
+.ma-summary-item.balance {
+    border-left: 3px solid #6366f1;
+}
+
+.ma-summary-label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.ma-summary-value {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.ma-txn-header {
+    margin-bottom: 12px;
+}
+
+.ma-txn-header h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
 }
