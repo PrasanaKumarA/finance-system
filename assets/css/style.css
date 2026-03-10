@@ -1058,14 +1058,15 @@ button:active,
    LOGIN PAGE
    ============================================================ */
 .login-page {
-    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--background);
     padding: 20px;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .login-page::before {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'financehub-cache-v4';
+const CACHE_NAME = 'financehub-cache-v5';
 const urlsToCache = [
     './',
     './index.php',

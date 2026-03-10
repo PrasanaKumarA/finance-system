@@ -64,7 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="manifest" href="<?php echo BASE_PATH; ?>/manifest.json">
     <meta name="theme-color" content="#4F46E5">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/assets/css/style.css">
+    <link rel="stylesheet"
+        href="<?php echo BASE_PATH; ?>/assets/css/style.css?v=<?php echo filemtime(__DIR__ . '/assets/css/style.css'); ?>">
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
