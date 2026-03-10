@@ -140,147 +140,309 @@ $transactions = mysqli_query($conn, "
 
 <div class="container">
 
-    <div class="action-bar">
-        <h2>Dashboard</h2>
-        <a href="budgets/set_budget.php" class="btn">📊 Set Budget</a>
-    </div>
+    <!-- DESKTOP DASHBOARD -->
+    <div class="d-none d-md-block">
+        <div class="action-bar">
+            <h2>Dashboard</h2>
+            <a href="budgets/set_budget.php" class="btn">📊 Set Budget</a>
+        </div>
 
-    <!-- MAIN CARDS -->
-    <div class="cards">
-        <div class="card total">
-            <h3>Total Balance</h3>
-            <p>₹ <?php echo number_format($total_balance, 2); ?></p>
-        </div>
-        <div class="card bank">
-            <h3>Bank Balance</h3>
-            <p>₹ <?php echo number_format($bank_balance, 2); ?></p>
-        </div>
-        <div class="card cash">
-            <h3>Cash Balance</h3>
-            <p>₹ <?php echo number_format($cash_balance, 2); ?></p>
-        </div>
-    </div>
-
-    <!-- MONTHLY SUMMARY -->
-    <h3>This Month Summary</h3>
-    <div class="cards">
-        <div class="card total">
-            <h3>Monthly Income</h3>
-            <p>₹ <?php echo number_format($monthly_income, 2); ?></p>
-        </div>
-        <div class="card cash">
-            <h3>Monthly Expense</h3>
-            <p>₹ <?php echo number_format($monthly_expense, 2); ?></p>
-        </div>
-        <div class="card bank">
-            <h3>Net Profit</h3>
-            <p>₹ <?php echo number_format($net_profit, 2); ?></p>
-        </div>
-    </div>
-
-    <!-- BUDGET PROGRESS -->
-    <?php if ($monthly_budget > 0 || mysqli_num_rows($cat_budgets) > 0) { ?>
-        <div class="budget-card">
-            <div class="action-bar" style="margin-bottom: 12px;">
-                <h3 style="margin:0;">Budget Tracker</h3>
-                <a href="budgets/set_budget.php" class="action-link">Edit →</a>
+        <!-- MAIN CARDS -->
+        <div class="cards">
+            <div class="card total">
+                <h3>Total Balance</h3>
+                <p>₹ <?php echo number_format($total_balance, 2); ?></p>
             </div>
+            <div class="card bank">
+                <h3>Bank Balance</h3>
+                <p>₹ <?php echo number_format($bank_balance, 2); ?></p>
+            </div>
+            <div class="card cash">
+                <h3>Cash Balance</h3>
+                <p>₹ <?php echo number_format($cash_balance, 2); ?></p>
+            </div>
+        </div>
 
-            <?php if ($monthly_budget > 0) {
-                $pct = round(($monthly_expense / $monthly_budget) * 100);
-                $bar_class = $pct > 100 ? 'danger' : ($pct > 75 ? 'warning' : '');
-                ?>
-                <div class="budget-item">
-                    <div class="budget-item-header">
-                        <span class="budget-item-name">Overall Monthly</span>
-                        <span class="budget-item-amounts">
-                            <strong>₹<?php echo number_format($monthly_expense, 2); ?></strong>
-                            / ₹<?php echo number_format($monthly_budget, 2); ?>
-                            (<?php echo min($pct, 999); ?>%)
-                        </span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill <?php echo $bar_class; ?>" style="width: <?php echo min($pct, 100); ?>%">
+        <!-- MONTHLY SUMMARY -->
+        <h3>This Month Summary</h3>
+        <div class="cards">
+            <div class="card total">
+                <h3>Monthly Income</h3>
+                <p>₹ <?php echo number_format($monthly_income, 2); ?></p>
+            </div>
+            <div class="card cash">
+                <h3>Monthly Expense</h3>
+                <p>₹ <?php echo number_format($monthly_expense, 2); ?></p>
+            </div>
+            <div class="card bank">
+                <h3>Net Profit</h3>
+                <p>₹ <?php echo number_format($net_profit, 2); ?></p>
+            </div>
+        </div>
+
+        <!-- BUDGET PROGRESS -->
+        <?php if ($monthly_budget > 0 || mysqli_num_rows($cat_budgets) > 0) { ?>
+            <div class="budget-card">
+                <div class="action-bar" style="margin-bottom: 12px;">
+                    <h3 style="margin:0;">Budget Tracker</h3>
+                    <a href="budgets/set_budget.php" class="action-link">Edit →</a>
+                </div>
+
+                <?php if ($monthly_budget > 0) {
+                    $pct = round(($monthly_expense / $monthly_budget) * 100);
+                    $bar_class = $pct > 100 ? 'danger' : ($pct > 75 ? 'warning' : '');
+                    ?>
+                    <div class="budget-item">
+                        <div class="budget-item-header">
+                            <span class="budget-item-name">Overall Monthly</span>
+                            <span class="budget-item-amounts">
+                                <strong>₹<?php echo number_format($monthly_expense, 2); ?></strong>
+                                / ₹<?php echo number_format($monthly_budget, 2); ?>
+                                (<?php echo min($pct, 999); ?>%)
+                            </span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill <?php echo $bar_class; ?>" style="width: <?php echo min($pct, 100); ?>%">
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php } ?>
+                <?php } ?>
 
-            <?php
-            mysqli_data_seek($cat_budgets, 0);
-            while ($cb = mysqli_fetch_assoc($cat_budgets)) {
-                $cpct = round(($cb['spent'] / $cb['budget_amount']) * 100);
-                $cbar = $cpct > 100 ? 'danger' : ($cpct > 75 ? 'warning' : '');
-                ?>
-                <div class="budget-item">
-                    <div class="budget-item-header">
-                        <span class="budget-item-name"><?php echo htmlspecialchars($cb['category_name']); ?></span>
-                        <span class="budget-item-amounts">
-                            <strong>₹<?php echo number_format($cb['spent'], 2); ?></strong>
-                            / ₹<?php echo number_format($cb['budget_amount'], 2); ?>
-                        </span>
+                <?php
+                mysqli_data_seek($cat_budgets, 0);
+                while ($cb = mysqli_fetch_assoc($cat_budgets)) {
+                    $cpct = round(($cb['spent'] / $cb['budget_amount']) * 100);
+                    $cbar = $cpct > 100 ? 'danger' : ($cpct > 75 ? 'warning' : '');
+                    ?>
+                    <div class="budget-item">
+                        <div class="budget-item-header">
+                            <span class="budget-item-name"><?php echo htmlspecialchars($cb['category_name']); ?></span>
+                            <span class="budget-item-amounts">
+                                <strong>₹<?php echo number_format($cb['spent'], 2); ?></strong>
+                                / ₹<?php echo number_format($cb['budget_amount'], 2); ?>
+                            </span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill <?php echo $cbar; ?>" style="width: <?php echo min($cpct, 100); ?>%">
+                            </div>
+                        </div>
                     </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill <?php echo $cbar; ?>" style="width: <?php echo min($cpct, 100); ?>%"></div>
-                    </div>
-                </div>
-            <?php } ?>
-        </div>
-    <?php } ?>
-
-    <!-- PIE CHART -->
-    <h3>Expense Distribution</h3>
-
-    <?php if (!empty($category_labels)) { ?>
-        <div class="chart-container" style="max-width: 500px; margin: 0 auto 30px auto;">
-            <canvas id="expenseChart"></canvas>
-        </div>
-    <?php } else { ?>
-        <p class="text-muted">No expense data available.</p>
-    <?php } ?>
-
-    <!-- BAR CHART -->
-    <h3>Income vs Expense (Last 6 Months)</h3>
-    <div class="chart-container">
-        <canvas id="barChart" style="max-height:350px;"></canvas>
-    </div>
-
-    <!-- RECENT TRANSACTIONS -->
-    <div class="action-bar mt-3">
-        <h3 style="margin:0;">Recent Transactions</h3>
-        <a href="transactions/view_transactions.php" class="action-link">See All →</a>
-    </div>
-
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Account</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Action</th>
-        </tr>
-        <?php while ($row = mysqli_fetch_assoc($transactions)) { ?>
-            <tr>
-                <td><?php echo $row['transaction_date']; ?></td>
-                <td><?php echo $row['account_name']; ?></td>
-                <td><?php echo $row['category_name']; ?></td>
-                <td><?php echo htmlspecialchars($row['description']); ?></td>
-                <td>
-                    <span class="badge <?php echo $row['type'] == 'Income' ? 'badge-income' : 'badge-expense'; ?>">
-                        <?php echo $row['type']; ?>
-                    </span>
-                </td>
-                <td class="<?php echo $row['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
-                    ₹ <?php echo number_format($row['amount'], 2); ?>
-                </td>
-                <td>
-                    <a href="transactions/edit_transaction.php?id=<?php echo $row['id']; ?>" class="action-link">Edit</a>
-                </td>
-            </tr>
+                <?php } ?>
+            </div>
         <?php } ?>
-    </table>
+
+        <!-- PIE CHART -->
+        <h3>Expense Distribution</h3>
+
+        <?php if (!empty($category_labels)) { ?>
+            <div class="chart-container" style="max-width: 500px; margin: 0 auto 30px auto;">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        <?php } else { ?>
+            <p class="text-muted">No expense data available.</p>
+        <?php } ?>
+
+        <!-- BAR CHART -->
+        <h3>Income vs Expense (Last 6 Months)</h3>
+        <div class="chart-container">
+            <canvas id="barChart" style="max-height:350px;"></canvas>
+        </div>
+
+        <!-- RECENT TRANSACTIONS -->
+        <div class="action-bar mt-3">
+            <h3 style="margin:0;">Recent Transactions</h3>
+            <a href="transactions/view_transactions.php" class="action-link">See All →</a>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Account</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+                <?php
+                mysqli_data_seek($transactions, 0);
+                while ($row = mysqli_fetch_assoc($transactions)) { ?>
+                    <tr>
+                        <td><?php echo $row['transaction_date']; ?></td>
+                        <td><?php echo $row['account_name']; ?></td>
+                        <td><?php echo $row['category_name']; ?></td>
+                        <td><?php echo htmlspecialchars($row['description']); ?></td>
+                        <td>
+                            <span class="badge <?php echo $row['type'] == 'Income' ? 'badge-income' : 'badge-expense'; ?>">
+                                <?php echo $row['type']; ?>
+                            </span>
+                        </td>
+                        <td class="<?php echo $row['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
+                            ₹ <?php echo number_format($row['amount'], 2); ?>
+                        </td>
+                        <td>
+                            <a href="transactions/edit_transaction.php?id=<?php echo $row['id']; ?>"
+                                class="action-link">Edit</a>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+        </div>
+    </div>
+
+    <!-- MOBILE DASHBOARD APP LAYOUT -->
+    <div class="d-block d-md-none mobile-dashboard">
+        <!-- Header -->
+        <div class="md-header">
+            <div class="md-greeting">
+                <?php
+                $hour = date('H');
+                $greeting = 'Good Evening';
+                if ($hour < 12)
+                    $greeting = 'Good Morning';
+                elseif ($hour < 17)
+                    $greeting = 'Good Afternoon';
+                ?>
+                <p><?php echo $greeting; ?></p>
+                <h1><?php echo htmlspecialchars($_SESSION['name']); ?></h1>
+            </div>
+            <div class="md-profile-icon">
+                <?php if (isset($profile_picture) && $profile_picture && file_exists(__DIR__ . '/' . $profile_picture)) { ?>
+                    <img src="<?php echo BASE_PATH . '/' . htmlspecialchars($profile_picture); ?>" alt="Profile">
+                <?php } else { ?>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="#faad14" stroke-width="2">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                        </polygon>
+                    </svg>
+                <?php } ?>
+            </div>
+        </div>
+
+        <!-- This Month Pill Cards -->
+        <div class="md-month-selector">
+            <h2>This month <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg></h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </div>
+
+        <div class="md-pills-row">
+            <div class="md-pill spending">
+                <div class="md-pill-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="19" x2="12" y2="5"></line>
+                        <polyline points="5 12 12 5 19 12"></polyline>
+                    </svg>
+                </div>
+                <div class="md-pill-content">
+                    <p>Spending</p>
+                    <h3>₹<?php echo number_format($monthly_expense); ?></h3>
+                </div>
+            </div>
+            <div class="md-pill income">
+                <div class="md-pill-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <polyline points="19 12 12 19 5 12"></polyline>
+                    </svg>
+                </div>
+                <div class="md-pill-content">
+                    <p>Income</p>
+                    <h3>₹<?php echo number_format($monthly_income); ?></h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="md-balance-badge">
+            Balance: ₹<?php echo number_format($net_profit); ?>
+        </div>
+
+        <!-- Recent Transactions List -->
+        <div class="md-section-header">
+            <h3>Recent transactions</h3>
+            <a href="transactions/view_transactions.php">See all</a>
+        </div>
+
+        <div class="md-txn-list">
+            <?php
+            mysqli_data_seek($transactions, 0);
+            while ($row = mysqli_fetch_assoc($transactions)) {
+                $isIncome = $row['type'] == 'Income';
+                $color = $isIncome ? '#10b981' : '#f59e0b';
+                // Pick a generic icon based on category logic or fallback
+                $icon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+                if (strpos(strtolower($row['category_name']), 'food') !== false) {
+                    $icon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>';
+                } else if (strpos(strtolower($row['category_name']), 'bill') !== false) {
+                    $icon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>';
+                }
+                ?>
+                <div class="md-txn-item"
+                    onclick="window.location='transactions/edit_transaction.php?id=<?php echo $row['id']; ?>'">
+                    <div class="md-txn-icon">
+                        <?php echo $icon; ?>
+                    </div>
+                    <div class="md-txn-details">
+                        <h4>₹<?php echo number_format($row['amount'], 1); ?></h4>
+                        <p>For
+                            <?php echo htmlspecialchars($row['description']) ?: htmlspecialchars($row['category_name']); ?>
+                        </p>
+                    </div>
+                    <div class="md-txn-meta">
+                        <span><?php echo date('d M y', strtotime($row['transaction_date'])); ?></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="#06b6d4" stroke-width="2">
+                            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                            <line x1="2" y1="10" x2="22" y2="10"></line>
+                        </svg>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+
+        <!-- Budgets Mobile Card -->
+        <div class="md-section-header">
+            <h3>Your budgets</h3>
+        </div>
+
+        <div class="md-budget-card">
+            <div class="md-budget-info">
+                <?php if ($monthly_budget > 0) {
+                    $pct = round(($monthly_expense / $monthly_budget) * 100);
+                    ?>
+                    <h4>Monthly Budget (<?php echo min($pct, 100); ?>%)</h4>
+                    <p>You have spent ₹<?php echo number_format($monthly_expense); ?> out of
+                        ₹<?php echo number_format($monthly_budget); ?>.</p>
+                <?php } else { ?>
+                    <h4>No Budget for This Month?</h4>
+                    <p>Setting a budget for your spending is a crucial step in achieving your financial goals.</p>
+                <?php } ?>
+                <a href="budgets/set_budget.php" class="btn btn-secondary"
+                    style="background:var(--surface);color:var(--text-main);">
+                    <?php echo $monthly_budget > 0 ? 'Edit Budget' : 'Set Up Budget'; ?>
+                </a>
+            </div>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none"
+                    stroke="var(--warning)" stroke-width="1.5">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    <line x1="12" y1="11" x2="12" y2="17"></line>
+                    <line x1="9" y1="14" x2="15" y2="14"></line>
+                </svg>
+            </div>
+        </div>
+
+    </div>
 
 </div>
 

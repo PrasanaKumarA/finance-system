@@ -7,7 +7,16 @@
     <title>Finance System</title>
     <link rel="icon" type="image/jpeg" href="<?php echo BASE_PATH; ?>/assets/images/favi.JPG">
     <link rel="apple-touch-icon" href="<?php echo BASE_PATH; ?>/assets/images/favi.JPG">
-    <link rel="manifest" href="<?php echo BASE_PATH; ?>/manifest.json">
+    <?php
+    $manifest_path = __DIR__ . '/manifest.json';
+    if (file_exists($manifest_path)) {
+        $manifest_content = file_get_contents($manifest_path);
+        $manifest_base64 = base64_encode($manifest_content);
+        echo '<link rel="manifest" href="data:application/manifest+json;base64,' . $manifest_base64 . '">';
+    } else {
+        echo '<link rel="manifest" href="' . BASE_PATH . '/manifest.json">';
+    }
+    ?>
     <meta name="theme-color" content="#4F46E5">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="stylesheet"
@@ -158,6 +167,83 @@ $bp = BASE_PATH;
             </a>
         </div>
     </nav>
+
+    <!-- MOBILE BOTTOM NAVIGATION (Hidden on Desktop) -->
+    <nav class="mobile-bottom-nav">
+        <a href="<?php echo $bp; ?>/index.php" class="<?php echo ($current_file == 'index.php') ? 'active' : ''; ?>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Home</span>
+        </a>
+        <a href="<?php echo $bp; ?>/reports/index.php"
+            class="<?php echo ($current_dir == 'reports') ? 'active' : ''; ?>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span>Analysis</span>
+        </a>
+
+        <div class="mobile-nav-fab-container">
+            <a href="<?php echo $bp; ?>/transactions/add_transaction.php" class="mobile-nav-fab">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+            </a>
+        </div>
+
+        <a href="<?php echo $bp; ?>/accounts/view_accounts.php"
+            class="<?php echo ($current_dir == 'accounts') ? 'active' : ''; ?>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
+            </svg>
+            <span>Accounts</span>
+        </a>
+        <a href="javascript:void(0)" onclick="document.getElementById('mobileSidebar').classList.add('active');">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="19" cy="12" r="1"></circle>
+                <circle cx="5" cy="12" r="1"></circle>
+            </svg>
+            <span>More</span>
+        </a>
+    </nav>
+
+    <!-- MOBILE MORE SIDEBAR -->
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="mobile-sidebar-header">
+            <h3>More Options</h3>
+            <button onclick="document.getElementById('mobileSidebar').classList.remove('active');" class="close-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="sidebar-nav">
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Admin') { ?>
+                <a href="<?php echo $bp; ?>/admin/index.php">Admin Panel</a>
+            <?php } ?>
+            <a href="<?php echo $bp; ?>/categories/view_categories.php">Categories</a>
+            <a href="<?php echo $bp; ?>/transactions/view_transactions.php">Transactions</a>
+            <a href="<?php echo $bp; ?>/budgets/set_budget.php">Budgets</a>
+            <hr>
+            <a href="<?php echo $bp; ?>/profile.php">Profile Settings</a>
+            <a href="javascript:void(0)" id="mobileThemeToggle">Toggle Theme</a>
+            <a href="<?php echo $bp; ?>/logout.php" style="color:var(--danger)">Logout</a>
+        </div>
+    </div>
 
     <!-- SIDEBAR OVERLAY (mobile) -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
