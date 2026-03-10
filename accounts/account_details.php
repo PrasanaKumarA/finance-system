@@ -56,40 +56,42 @@ $transactions = mysqli_query($conn, "
     </div>
 
     <h3>Transaction History</h3>
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Action</th>
-        </tr>
-        <?php if (mysqli_num_rows($transactions) > 0) {
-            while ($t = mysqli_fetch_assoc($transactions)) { ?>
-                <tr>
-                    <td><?php echo $t['transaction_date']; ?></td>
-                    <td><?php echo $t['category_name'] ? htmlspecialchars($t['category_name']) : '-'; ?></td>
-                    <td><?php echo htmlspecialchars($t['description']); ?></td>
-                    <td>
-                        <span class="badge <?php echo $t['type'] == 'Income' ? 'badge-income' : 'badge-expense'; ?>">
-                            <?php echo $t['type']; ?>
-                        </span>
-                    </td>
-                    <td class="<?php echo $t['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
-                        ₹ <?php echo number_format($t['amount'], 2); ?>
-                    </td>
-                    <td>
-                        <a href="<?php echo BASE_PATH; ?>/transactions/edit_transaction.php?id=<?php echo $t['id']; ?>"
-                            class="action-link">Edit</a>
-                    </td>
-                </tr>
-            <?php }
-        } else { ?>
+    <div class="table-wrapper">
+        <table>
             <tr>
-                <td colspan="6" class="text-center text-muted">No transactions found for this account.</td>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Action</th>
             </tr>
-        <?php } ?>
-    </table>
+            <?php if (mysqli_num_rows($transactions) > 0) {
+                while ($t = mysqli_fetch_assoc($transactions)) { ?>
+                    <tr>
+                        <td><?php echo $t['transaction_date']; ?></td>
+                        <td><?php echo $t['category_name'] ? htmlspecialchars($t['category_name']) : '-'; ?></td>
+                        <td><?php echo htmlspecialchars($t['description']); ?></td>
+                        <td>
+                            <span class="badge <?php echo $t['type'] == 'Income' ? 'badge-income' : 'badge-expense'; ?>">
+                                <?php echo $t['type']; ?>
+                            </span>
+                        </td>
+                        <td class="<?php echo $t['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
+                            ₹ <?php echo number_format($t['amount'], 2); ?>
+                        </td>
+                        <td>
+                            <a href="<?php echo BASE_PATH; ?>/transactions/edit_transaction.php?id=<?php echo $t['id']; ?>"
+                                class="action-link">Edit</a>
+                        </td>
+                    </tr>
+                <?php }
+            } else { ?>
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No transactions found for this account.</td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
 </div>
 <?php include "../includes/footer.php"; ?>

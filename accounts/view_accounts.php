@@ -34,33 +34,35 @@ $type_icons = [
         <div class="alert alert-danger">Account not found or you don't have permission to delete it.</div>
     <?php } ?>
 
-    <table>
-        <tr>
-            <th>Account Name</th>
-            <th>Type</th>
-            <th>Available Balance</th>
-            <th>Actions</th>
-        </tr>
-        <?php while ($row = mysqli_fetch_assoc($query)) {
-            $balance = getAccountBalance($conn, $row['id']);
-            $icon = $type_icons[$row['account_type']] ?? '';
-            ?>
+    <div class="table-wrapper">
+        <table>
             <tr>
-                <td><a
-                        href="account_details.php?id=<?php echo $row['id']; ?>"><?php echo htmlspecialchars($row['account_name']); ?></a>
-                </td>
-                <td><?php echo $icon . ' ' . htmlspecialchars($row['account_type'] ?? '—'); ?></td>
-                <td>₹ <?php echo number_format($balance, 2); ?></td>
-                <td>
-                    <a href="account_details.php?id=<?php echo $row['id']; ?>" class="action-link">View</a>
-                    <a href="delete_account.php?id=<?php echo $row['id']; ?>" class="action-link danger"
-                        onclick="return confirm('⚠️ Delete this account?\n\nAll transactions linked to this account will also be permanently deleted. This cannot be undone.')">
-                        Delete
-                    </a>
-                </td>
+                <th>Account Name</th>
+                <th>Type</th>
+                <th>Available Balance</th>
+                <th>Actions</th>
             </tr>
-        <?php } ?>
-    </table>
+            <?php while ($row = mysqli_fetch_assoc($query)) {
+                $balance = getAccountBalance($conn, $row['id']);
+                $icon = $type_icons[$row['account_type']] ?? '';
+                ?>
+                <tr>
+                    <td><a
+                            href="account_details.php?id=<?php echo $row['id']; ?>"><?php echo htmlspecialchars($row['account_name']); ?></a>
+                    </td>
+                    <td><?php echo $icon . ' ' . htmlspecialchars($row['account_type'] ?? '—'); ?></td>
+                    <td>₹ <?php echo number_format($balance, 2); ?></td>
+                    <td>
+                        <a href="account_details.php?id=<?php echo $row['id']; ?>" class="action-link">View</a>
+                        <a href="delete_account.php?id=<?php echo $row['id']; ?>" class="action-link danger"
+                            onclick="return confirm('⚠️ Delete this account?\n\nAll transactions linked to this account will also be permanently deleted. This cannot be undone.')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
 </div>
 
 <?php include "../includes/footer.php"; ?>

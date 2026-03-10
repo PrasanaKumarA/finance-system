@@ -22,35 +22,37 @@ $transactions = mysqli_query($conn, "
         <a href="add_transaction.php" class="btn">+ Add Transaction</a>
     </div>
 
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Account</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Action</th>
-        </tr>
-        <?php while ($row = mysqli_fetch_assoc($transactions)) { ?>
+    <div class="table-wrapper">
+        <table>
             <tr>
-                <td><?php echo $row['transaction_date']; ?></td>
-                <td><?php echo htmlspecialchars($row['account_name']); ?></td>
-                <td><?php echo htmlspecialchars($row['category_name'] ?? '-'); ?></td>
-                <td><?php echo htmlspecialchars($row['description']); ?></td>
-                <td>
-                    <span class="badge <?php echo $row['type'] == 'Income' ? 'badge-income' : 'badge-expense'; ?>">
-                        <?php echo $row['type']; ?>
-                    </span>
-                </td>
-                <td class="<?php echo $row['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
-                    ₹ <?php echo number_format($row['amount'], 2); ?>
-                </td>
-                <td>
-                    <a href="edit_transaction.php?id=<?php echo $row['id']; ?>" class="action-link">Edit</a>
-                </td>
+                <th>Date</th>
+                <th>Account</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Action</th>
             </tr>
-        <?php } ?>
-    </table>
+            <?php while ($row = mysqli_fetch_assoc($transactions)) { ?>
+                <tr>
+                    <td><?php echo $row['transaction_date']; ?></td>
+                    <td><?php echo htmlspecialchars($row['account_name']); ?></td>
+                    <td><?php echo htmlspecialchars($row['category_name'] ?? '-'); ?></td>
+                    <td><?php echo htmlspecialchars($row['description']); ?></td>
+                    <td>
+                        <span class="badge <?php echo $row['type'] == 'Income' ? 'badge-income' : 'badge-expense'; ?>">
+                            <?php echo $row['type']; ?>
+                        </span>
+                    </td>
+                    <td class="<?php echo $row['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
+                        ₹ <?php echo number_format($row['amount'], 2); ?>
+                    </td>
+                    <td>
+                        <a href="edit_transaction.php?id=<?php echo $row['id']; ?>" class="action-link">Edit</a>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
 </div>
 <?php include "../includes/footer.php"; ?>

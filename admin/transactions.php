@@ -88,34 +88,36 @@ $net = $total_income - $total_expense;
         </div>
     </div>
 
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>User</th>
-            <th>Account</th>
-            <th>Category</th>
-            <th>Type</th>
-            <th>Amount</th>
-        </tr>
-
-        <?php foreach ($rows as $r) { ?>
+    <div class="table-wrapper">
+        <table>
             <tr>
-                <td><?= $r['transaction_date'] ?></td>
-                <td><?= htmlspecialchars($r['user_name']) ?></td>
-                <td><?= htmlspecialchars($r['account_name']) ?></td>
-                <td><?= htmlspecialchars($r['category_name'] ?? '-') ?></td>
-                <td>
-                    <span class="badge <?= $r['type'] == 'Income' ? 'badge-income' : 'badge-expense' ?>">
-                        <?= $r['type'] ?>
-                    </span>
-                </td>
-                <td class="<?= $r['type'] == 'Income' ? 'text-success' : 'text-danger' ?>">
-                    ₹ <?= number_format($r['amount'], 2) ?>
-                </td>
+                <th>Date</th>
+                <th>User</th>
+                <th>Account</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Amount</th>
             </tr>
-        <?php } ?>
 
-    </table>
+            <?php foreach ($rows as $r) { ?>
+                <tr>
+                    <td><?= $r['transaction_date'] ?></td>
+                    <td><?= htmlspecialchars($r['user_name']) ?></td>
+                    <td><?= htmlspecialchars($r['account_name']) ?></td>
+                    <td><?= htmlspecialchars($r['category_name'] ?? '-') ?></td>
+                    <td>
+                        <span class="badge <?= $r['type'] == 'Income' ? 'badge-income' : 'badge-expense' ?>">
+                            <?= $r['type'] ?>
+                        </span>
+                    </td>
+                    <td class="<?= $r['type'] == 'Income' ? 'text-success' : 'text-danger' ?>">
+                        ₹ <?= number_format($r['amount'], 2) ?>
+                    </td>
+                </tr>
+            <?php } ?>
+
+        </table>
+    </div>
 
 </div>
 

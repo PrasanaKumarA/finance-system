@@ -92,58 +92,60 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY created_at DESC");
 
     <h3>Existing Users</h3>
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Username</th>
-            <th>Role</th>
-            <th>Created</th>
-            <th>Action</th>
-        </tr>
-
-        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+    <div class="table-wrapper">
+        <table>
             <tr>
-                <td><?= $row['id'] ?></td>
-                <td><?= htmlspecialchars($row['name']) ?></td>
-                <td><?= htmlspecialchars($row['username']) ?></td>
-                <td>
-                    <span class="badge <?= $row['role'] == 'Admin' ? 'badge-admin' : 'badge-income' ?>">
-                        <?= $row['role'] ?>
-                    </span>
-                </td>
-                <td><?= $row['created_at'] ?></td>
-
-                <td>
-                    <?php if ($row['id'] != $_SESSION['user_id']) { ?>
-
-                        <?php if ($row['role'] == 'Admin') { ?>
-                            <a href="toggle_role.php?id=<?= $row['id'] ?>" class="text-warning"
-                                onclick="return confirm('Change this Admin to User?')">
-                                Make User
-                            </a>
-                        <?php } else { ?>
-                            <a href="toggle_role.php?id=<?= $row['id'] ?>" class="text-success"
-                                onclick="return confirm('Promote this User to Admin?')">
-                                Make Admin
-                            </a>
-                        <?php } ?>
-
-                        &nbsp;|&nbsp;
-
-                        <a href="delete_user.php?id=<?= $row['id'] ?>" class="text-danger"
-                            onclick="return confirm('Delete this user?')">
-                            Delete
-                        </a>
-
-                    <?php } else { ?>
-                        <span class="text-muted">Current User</span>
-                    <?php } ?>
-                </td>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Created</th>
+                <th>Action</th>
             </tr>
-        <?php } ?>
 
-    </table>
+            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                <tr>
+                    <td><?= $row['id'] ?></td>
+                    <td><?= htmlspecialchars($row['name']) ?></td>
+                    <td><?= htmlspecialchars($row['username']) ?></td>
+                    <td>
+                        <span class="badge <?= $row['role'] == 'Admin' ? 'badge-admin' : 'badge-income' ?>">
+                            <?= $row['role'] ?>
+                        </span>
+                    </td>
+                    <td><?= $row['created_at'] ?></td>
+
+                    <td>
+                        <?php if ($row['id'] != $_SESSION['user_id']) { ?>
+
+                            <?php if ($row['role'] == 'Admin') { ?>
+                                <a href="toggle_role.php?id=<?= $row['id'] ?>" class="text-warning"
+                                    onclick="return confirm('Change this Admin to User?')">
+                                    Make User
+                                </a>
+                            <?php } else { ?>
+                                <a href="toggle_role.php?id=<?= $row['id'] ?>" class="text-success"
+                                    onclick="return confirm('Promote this User to Admin?')">
+                                    Make Admin
+                                </a>
+                            <?php } ?>
+
+                            &nbsp;|&nbsp;
+
+                            <a href="delete_user.php?id=<?= $row['id'] ?>" class="text-danger"
+                                onclick="return confirm('Delete this user?')">
+                                Delete
+                            </a>
+
+                        <?php } else { ?>
+                            <span class="text-muted">Current User</span>
+                        <?php } ?>
+                    </td>
+                </tr>
+            <?php } ?>
+
+        </table>
+    </div>
 
 </div>
 

@@ -148,39 +148,41 @@ $categories = mysqli_query($conn, "SELECT * FROM categories");
 
     <h3>Transactions History</h3>
 
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Account</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Amount</th>
-        </tr>
-
-        <?php if (count($rows) > 0) {
-            foreach ($rows as $r) { ?>
-                <tr>
-                    <td><?= $r['transaction_date'] ?></td>
-                    <td><?= htmlspecialchars($r['account_name']) ?></td>
-                    <td><?= htmlspecialchars($r['category_name'] ?? '-') ?></td>
-                    <td><?= htmlspecialchars($r['description']) ?></td>
-                    <td>
-                        <span class="badge <?= $r['type'] == 'Income' ? 'badge-income' : 'badge-expense' ?>">
-                            <?= $r['type'] ?>
-                        </span>
-                    </td>
-                    <td class="<?= $r['type'] == 'Income' ? 'text-success' : 'text-danger' ?>">
-                        ₹ <?= number_format($r['amount'], 2) ?>
-                    </td>
-                </tr>
-            <?php }
-        } else { ?>
+    <div class="table-wrapper">
+        <table>
             <tr>
-                <td colspan="6" class="text-center text-muted">No transactions found for the selected criteria.</td>
+                <th>Date</th>
+                <th>Account</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Amount</th>
             </tr>
-        <?php } ?>
-    </table>
+
+            <?php if (count($rows) > 0) {
+                foreach ($rows as $r) { ?>
+                    <tr>
+                        <td><?= $r['transaction_date'] ?></td>
+                        <td><?= htmlspecialchars($r['account_name']) ?></td>
+                        <td><?= htmlspecialchars($r['category_name'] ?? '-') ?></td>
+                        <td><?= htmlspecialchars($r['description']) ?></td>
+                        <td>
+                            <span class="badge <?= $r['type'] == 'Income' ? 'badge-income' : 'badge-expense' ?>">
+                                <?= $r['type'] ?>
+                            </span>
+                        </td>
+                        <td class="<?= $r['type'] == 'Income' ? 'text-success' : 'text-danger' ?>">
+                            ₹ <?= number_format($r['amount'], 2) ?>
+                        </td>
+                    </tr>
+                <?php }
+            } else { ?>
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No transactions found for the selected criteria.</td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
 
 </div>
 

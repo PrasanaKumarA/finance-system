@@ -611,7 +611,7 @@ hr {
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
-    overflow: hidden;
+    overflow-x: auto;
     margin-top: 8px;
 }
 
@@ -2048,9 +2048,8 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
     .main-content {
         margin-left: 0;
         margin-top: 0;
-        padding: 0;
+        padding: 16px;
         padding-bottom: 80px;
-        /* Space for bottom nav */
         /* Space for bottom nav */
         min-height: 100vh;
         background: #121212;
@@ -2063,6 +2062,14 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
 
     .container {
         padding: 0;
+    }
+
+    form {
+        padding: 20px 12px;
+    }
+
+    .cards {
+        gap: 12px;
     }
 
     /* Mobile Bottom Navigation */
