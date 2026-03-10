@@ -1,4 +1,4 @@
-const CACHE_NAME = 'financehub-cache-v5';
+const CACHE_NAME = 'financehub-cache-v6';
 const urlsToCache = [
     './',
     './index.php',
@@ -8,11 +8,10 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
+    self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('Opened cache');
-                // Use Promise.allSettled or catch individual so one failure doesn't block the rest
                 return Promise.allSettled(
                     urlsToCache.map(url => {
                         return fetch(new Request(url, { cache: 'reload' }))
@@ -22,7 +21,7 @@ self.addEventListener('install', event => {
                                 }
                                 return cache.put(url, response);
                             })
-                            .catch(error => console.error('Failed to cache:', url, error));
+                            .catch(error => console.warn('SW: Failed to cache:', url, error.message));
                     })
                 );
             })
@@ -30,13 +29,20 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
+    // Skip non-GET requests
+    if (event.request.method !== 'GET') return;
+
     event.respondWith(
         fetch(event.request)
             .then(networkResponse => {
-                return caches.open(CACHE_NAME).then(cache => {
-                    cache.put(event.request, networkResponse.clone());
-                    return networkResponse;
-                });
+                // Only cache same-origin requests
+                if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+                    const responseToCache = networkResponse.clone();
+                    caches.open(CACHE_NAME).then(cache => {
+                        cache.put(event.request, responseToCache);
+                    });
+                }
+                return networkResponse;
             })
             .catch(() => {
                 return caches.match(event.request);
@@ -45,16 +51,17 @@ self.addEventListener('fetch', event => {
 });
 
 self.addEventListener('activate', event => {
-    const cacheWhitelist = [CACHE_NAME];
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames.map(cacheName => {
-                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                    if (cacheName !== CACHE_NAME) {
                         return caches.delete(cacheName);
                     }
                 })
             );
+        }).then(() => {
+            return self.clients.claim();
         })
     );
 });

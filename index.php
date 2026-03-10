@@ -136,6 +136,21 @@ $transactions = mysqli_query($conn, "
     ORDER BY t.created_at DESC
     LIMIT 5
 ");
+
+/* ================= ALL TRANSACTIONS (for mobile search & filter) ================= */
+$all_txn_query = mysqli_query($conn, "
+    SELECT t.id, t.amount, t.type, t.description, t.transaction_date,
+           a.account_name, c.category_name
+    FROM transactions t
+    JOIN accounts a ON t.account_id = a.id
+    LEFT JOIN categories c ON t.category_id = c.id
+    WHERE t.user_id = $user_id
+    ORDER BY t.transaction_date DESC
+");
+$all_transactions_json = [];
+while ($txn = mysqli_fetch_assoc($all_txn_query)) {
+    $all_transactions_json[] = $txn;
+}
 ?>
 
 <div class="container">
@@ -296,42 +311,67 @@ $transactions = mysqli_query($conn, "
         <!-- Header -->
         <div class="md-header">
             <div class="md-greeting">
-                <?php
-                $hour = date('H');
-                $greeting = 'Good Evening';
-                if ($hour < 12)
-                    $greeting = 'Good Morning';
-                elseif ($hour < 17)
-                    $greeting = 'Good Afternoon';
-                ?>
-                <p><?php echo $greeting; ?></p>
+                <p id="mobileGreeting">Good Evening</p>
                 <h1><?php echo htmlspecialchars($_SESSION['name']); ?></h1>
             </div>
-            <div class="md-profile-icon">
-                <?php if (isset($profile_picture) && $profile_picture && file_exists(__DIR__ . '/' . $profile_picture)) { ?>
-                    <img src="<?php echo BASE_PATH . '/' . htmlspecialchars($profile_picture); ?>" alt="Profile">
-                <?php } else { ?>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="#faad14" stroke-width="2">
-                        <polygon
-                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                        </polygon>
-                    </svg>
-                <?php } ?>
+            <div class="md-header-actions">
+                <button class="md-theme-toggle" id="mobileThemeBtn" type="button" title="Toggle theme">
+                    <span class="icon-sun">☀️</span>
+                    <span class="icon-moon">🌙</span>
+                </button>
+                <div class="md-profile-icon">
+                    <?php if (isset($profile_picture) && $profile_picture && file_exists(__DIR__ . '/' . $profile_picture)) { ?>
+                        <img src="<?php echo BASE_PATH . '/' . htmlspecialchars($profile_picture); ?>" alt="Profile">
+                    <?php } else { ?>
+                        <div class="md-avatar-fallback"><?php echo strtoupper(substr($_SESSION['name'], 0, 1)); ?></div>
+                    <?php } ?>
+                </div>
             </div>
         </div>
 
         <!-- This Month Pill Cards -->
         <div class="md-month-selector">
-            <h2>This month <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg></h2>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+            <div class="md-dropdown-wrapper">
+                <h2 id="mdDropdownBtn">This month <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg></h2>
+                <div class="md-dropdown-menu" id="mdDropdownMenu">
+                    <div class="md-dropdown-item active" data-period="month">
+                        <strong>Month</strong>
+                        <span><?php echo date('01 M') . ' - ' . date('t M Y'); ?></span>
+                    </div>
+                    <div class="md-dropdown-item" data-period="year">
+                        <strong>Year</strong>
+                        <span><?php echo date('01 Jan') . ' - 31 Dec ' . date('Y'); ?></span>
+                    </div>
+                    <div class="md-dropdown-item" data-period="all">
+                        <strong>All Time</strong>
+                        <span>∞</span>
+                    </div>
+                </div>
+            </div>
+            <button class="md-search-btn" id="mdSearchBtn" type="button" title="Search transactions">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Search Overlay -->
+        <div class="md-search-overlay" id="mdSearchOverlay">
+            <div class="md-search-bar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="mdSearchInput" placeholder="Search transactions..." autocomplete="off">
+                <button type="button" id="mdSearchClose" class="md-search-close">✕</button>
+            </div>
+            <div class="md-search-results" id="mdSearchResults"></div>
         </div>
 
         <div class="md-pills-row">
@@ -509,6 +549,130 @@ $transactions = mysqli_query($conn, "
             }
         }
     });
+</script>
+
+<!-- Mobile Dashboard Scripts -->
+<script>
+    (function () {
+        // === Dynamic Greeting ===
+        var greetEl = document.getElementById('mobileGreeting');
+        if (greetEl) {
+            var h = new Date().getHours();
+            greetEl.textContent = h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
+        }
+
+        // === Mobile Theme Toggle ===
+        var mobileThemeBtn = document.getElementById('mobileThemeBtn');
+        if (mobileThemeBtn) {
+            mobileThemeBtn.addEventListener('click', function () {
+                var cur = document.documentElement.getAttribute('data-theme') || 'light';
+                var next = cur === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('finance-theme', next);
+            });
+        }
+
+        // === All Transactions Data ===
+        var allTxns = <?php echo json_encode($all_transactions_json); ?>;
+
+        // === Time Period Dropdown ===
+        var dropdownBtn = document.getElementById('mdDropdownBtn');
+        var dropdownMenu = document.getElementById('mdDropdownMenu');
+        var spendingEl = document.querySelector('.md-pill.spending .md-pill-content h3');
+        var incomeEl = document.querySelector('.md-pill.income .md-pill-content h3');
+        var balanceBadge = document.querySelector('.md-balance-badge');
+
+        if (dropdownBtn && dropdownMenu) {
+            dropdownBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('open');
+            });
+
+            document.addEventListener('click', function () {
+                dropdownMenu.classList.remove('open');
+            });
+
+            dropdownMenu.querySelectorAll('.md-dropdown-item').forEach(function (item) {
+                item.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdownMenu.querySelectorAll('.md-dropdown-item').forEach(function (i) { i.classList.remove('active'); });
+                    this.classList.add('active');
+                    var period = this.dataset.period;
+                    var label = this.querySelector('strong').textContent;
+                    dropdownBtn.innerHTML = label + ' <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+                    dropdownMenu.classList.remove('open');
+                    filterByPeriod(period);
+                });
+            });
+        }
+
+        function filterByPeriod(period) {
+            var now = new Date();
+            var spending = 0, income = 0;
+            allTxns.forEach(function (t) {
+                var d = new Date(t.transaction_date);
+                var inRange = false;
+                if (period === 'month') {
+                    inRange = d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                } else if (period === 'year') {
+                    inRange = d.getFullYear() === now.getFullYear();
+                } else {
+                    inRange = true;
+                }
+                if (inRange) {
+                    if (t.type === 'Expense') spending += parseFloat(t.amount);
+                    else if (t.type === 'Income') income += parseFloat(t.amount);
+                }
+            });
+            if (spendingEl) spendingEl.textContent = '₹' + spending.toLocaleString('en-IN');
+            if (incomeEl) incomeEl.textContent = '₹' + income.toLocaleString('en-IN');
+            if (balanceBadge) balanceBadge.textContent = 'Balance: ₹' + (income - spending).toLocaleString('en-IN');
+        }
+
+        // === Global Search ===
+        var searchBtn = document.getElementById('mdSearchBtn');
+        var searchOverlay = document.getElementById('mdSearchOverlay');
+        var searchInput = document.getElementById('mdSearchInput');
+        var searchClose = document.getElementById('mdSearchClose');
+        var searchResults = document.getElementById('mdSearchResults');
+
+        if (searchBtn && searchOverlay) {
+            searchBtn.addEventListener('click', function () {
+                searchOverlay.classList.add('open');
+                setTimeout(function () { searchInput.focus(); }, 100);
+            });
+            searchClose.addEventListener('click', function () {
+                searchOverlay.classList.remove('open');
+                searchInput.value = '';
+                searchResults.innerHTML = '';
+            });
+            searchInput.addEventListener('input', function () {
+                var q = this.value.toLowerCase().trim();
+                if (!q) { searchResults.innerHTML = ''; return; }
+                var matches = allTxns.filter(function (t) {
+                    return (t.description && t.description.toLowerCase().includes(q)) ||
+                        (t.category_name && t.category_name.toLowerCase().includes(q)) ||
+                        (t.amount && t.amount.toString().includes(q)) ||
+                        (t.account_name && t.account_name.toLowerCase().includes(q));
+                }).slice(0, 20);
+                if (matches.length === 0) {
+                    searchResults.innerHTML = '<div class="md-search-empty">No transactions found</div>';
+                    return;
+                }
+                var html = '';
+                matches.forEach(function (t) {
+                    var color = t.type === 'Income' ? '#10b981' : '#f59e0b';
+                    var dateStr = new Date(t.transaction_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' });
+                    html += '<div class="md-txn-item" onclick="window.location=\'transactions/edit_transaction.php?id=' + t.id + '\'">';
+                    html += '<div class="md-txn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg></div>';
+                    html += '<div class="md-txn-details"><h4>₹' + parseFloat(t.amount).toLocaleString('en-IN') + '</h4>';
+                    html += '<p>' + (t.description || t.category_name || '') + '</p></div>';
+                    html += '<div class="md-txn-meta"><span>' + dateStr + '</span></div></div>';
+                });
+                searchResults.innerHTML = html;
+            });
+        }
+    })();
 </script>
 
 <?php include "includes/footer.php"; ?>
