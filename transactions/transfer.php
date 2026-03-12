@@ -23,12 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Deduct from source
         mysqli_query($conn, "INSERT INTO transactions 
         (user_id, account_id, type, amount, transaction_date, description)
-        VALUES ($user_id, $from_account, 'Expense', '$amount', '$date', 'Transfer Out')");
+        VALUES ($user_id, $from_account, 'Transfer', '$amount', '$date', 'Transfer Out')");
 
         // Add to destination
         mysqli_query($conn, "INSERT INTO transactions 
         (user_id, account_id, type, amount, transaction_date, description)
-        VALUES ($user_id, $to_account, 'Income', '$amount', '$date', 'Transfer In')");
+        VALUES ($user_id, $to_account, 'Transfer', '$amount', '$date', 'Transfer In')");
 
         $success_msg = "Transfer Successful!";
     }

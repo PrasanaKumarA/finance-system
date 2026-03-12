@@ -122,6 +122,15 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id = $use
 
         <button type="submit" class="btn" style="width: 100%; margin-top: 8px;">Update Transaction</button>
     </form>
+
+    <div style="max-width: 600px; margin-top: 16px;">
+        <a href="delete_transaction.php?id=<?php echo $transaction_id; ?>" 
+           class="btn btn-danger" 
+           style="width: 100%; text-align: center;"
+           onclick="return confirm('Are you sure you want to delete this transaction? This action cannot be undone.')">
+            Delete Transaction
+        </a>
+    </div>
 </div>
 
 <?php include "../includes/footer.php"; ?>

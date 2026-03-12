@@ -25,11 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['ajax_action'])) {
         } else {
             mysqli_query($conn, "INSERT INTO transactions 
             (user_id, account_id, type, amount, transaction_date, description)
-            VALUES ($user_id, $from_account, 'Expense', $amount, '$date', 'Transfer Out to Account #$to_account - $desc')");
+            VALUES ($user_id, $from_account, 'Transfer', $amount, '$date', 'Transfer Out to Account #$to_account - $desc')");
 
             mysqli_query($conn, "INSERT INTO transactions 
             (user_id, account_id, type, amount, transaction_date, description)
-            VALUES ($user_id, $to_account, 'Income', $amount, '$date', 'Transfer In from Account #$from_account - $desc')");
+            VALUES ($user_id, $to_account, 'Transfer', $amount, '$date', 'Transfer In from Account #$from_account - $desc')");
 
             $success_msg = "Transfer successfully recorded!";
         }

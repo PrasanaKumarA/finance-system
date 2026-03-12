@@ -282,18 +282,22 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
                 </tr>
                 <?php
                 mysqli_data_seek($transactions, 0);
-                while ($row = mysqli_fetch_assoc($transactions)) { ?>
+                while ($row = mysqli_fetch_assoc($transactions)) { 
+                    $badge_class = 'badge-expense';
+                    if ($row['type'] == 'Income') $badge_class = 'badge-income';
+                    elseif ($row['type'] == 'Transfer') $badge_class = 'badge-transfer';
+                ?>
                     <tr>
                         <td><?php echo $row['transaction_date']; ?></td>
                         <td><?php echo $row['account_name']; ?></td>
                         <td><?php echo $row['category_name']; ?></td>
                         <td><?php echo htmlspecialchars($row['description']); ?></td>
                         <td>
-                            <span class="badge <?php echo $row['type'] == 'Income' ? 'badge-income' : 'badge-expense'; ?>">
+                            <span class="badge <?php echo $badge_class; ?>">
                                 <?php echo $row['type']; ?>
                             </span>
                         </td>
-                        <td class="<?php echo $row['type'] == 'Income' ? 'text-success' : 'text-danger'; ?>">
+                        <td class="<?php echo $row['type'] == 'Income' ? 'text-success' : ($row['type'] == 'Transfer' ? 'text-warning' : 'text-danger'); ?>">
                             ₹ <?php echo number_format($row['amount'], 2); ?>
                         </td>
                         <td>
@@ -311,53 +315,69 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
         <!-- Header -->
         <div class="md-header">
             <div class="md-greeting">
-                <p id="mobileGreeting">Good Evening</p>
+                <p id="mobileGreeting">Good Evening,</p>
                 <h1><?php echo htmlspecialchars($_SESSION['name']); ?></h1>
             </div>
             <div class="md-header-actions">
-                <button class="md-theme-toggle" id="mobileThemeBtn" type="button" title="Toggle theme">
+                <button class="md-icon-btn" id="mdSearchBtn" type="button" title="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <button class="md-icon-btn md-diamond-btn" id="mobileThemeBtn" type="button" title="Toggle theme">
                     <span class="icon-sun">☀️</span>
                     <span class="icon-moon">🌙</span>
                 </button>
-                <div class="md-profile-icon">
+                <a href="profile.php" class="md-profile-icon">
                     <?php if (isset($profile_picture) && $profile_picture && file_exists(__DIR__ . '/' . $profile_picture)) { ?>
                         <img src="<?php echo BASE_PATH . '/' . htmlspecialchars($profile_picture); ?>" alt="Profile">
                     <?php } else { ?>
                         <div class="md-avatar-fallback"><?php echo strtoupper(substr($_SESSION['name'], 0, 1)); ?></div>
                     <?php } ?>
-                </div>
+                </a>
             </div>
         </div>
 
-        <!-- This Month Pill Cards -->
-        <div class="md-month-selector">
-            <div class="md-dropdown-wrapper">
-                <h2 id="mdDropdownBtn">This month <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg></h2>
-                <div class="md-dropdown-menu" id="mdDropdownMenu">
-                    <div class="md-dropdown-item active" data-period="month">
-                        <strong>Month</strong>
-                        <span><?php echo date('01 M') . ' - ' . date('t M Y'); ?></span>
-                    </div>
-                    <div class="md-dropdown-item" data-period="year">
-                        <strong>Year</strong>
-                        <span><?php echo date('01 Jan') . ' - 31 Dec ' . date('Y'); ?></span>
-                    </div>
-                    <div class="md-dropdown-item" data-period="all">
-                        <strong>All Time</strong>
-                        <span>∞</span>
+        <!-- Cash Flow Card -->
+        <div class="md-cashflow-card">
+            <div class="md-cashflow-header">
+                <span class="md-cashflow-label">CASH FLOW</span>
+                <div class="md-dropdown-wrapper">
+                    <button class="md-cashflow-period" id="mdDropdownBtn" type="button">
+                        This Month <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="md-dropdown-menu" id="mdDropdownMenu">
+                        <div class="md-dropdown-item active" data-period="month">
+                            <strong>Month</strong>
+                            <span><?php echo date('01 M') . ' - ' . date('t M Y'); ?></span>
+                        </div>
+                        <div class="md-dropdown-item" data-period="year">
+                            <strong>Year</strong>
+                            <span><?php echo date('01 Jan') . ' - 31 Dec ' . date('Y'); ?></span>
+                        </div>
+                        <div class="md-dropdown-item" data-period="all">
+                            <strong>All Time</strong>
+                            <span>∞</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <button class="md-search-btn" id="mdSearchBtn" type="button" title="Search transactions">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-            </button>
+            <div class="md-cashflow-amounts">
+                <div class="md-cashflow-col">
+                    <span class="md-cf-type spending">SPENDING</span>
+                    <span class="md-cf-value" id="mdSpending">₹<?php echo number_format($monthly_expense); ?></span>
+                </div>
+                <div class="md-cashflow-col right">
+                    <span class="md-cf-type income">INCOME</span>
+                    <span class="md-cf-value" id="mdIncome">₹<?php echo number_format($monthly_income); ?></span>
+                </div>
+            </div>
+            <div class="md-cashflow-balance">
+                <span class="md-cf-balance-label">Net Balance</span>
+                <span class="md-cf-balance-value" id="mdNetBalance">₹<?php echo number_format($net_profit); ?></span>
+            </div>
         </div>
 
         <!-- Search Overlay -->
@@ -374,42 +394,9 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
             <div class="md-search-results" id="mdSearchResults"></div>
         </div>
 
-        <div class="md-pills-row">
-            <div class="md-pill spending">
-                <div class="md-pill-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="19" x2="12" y2="5"></line>
-                        <polyline points="5 12 12 5 19 12"></polyline>
-                    </svg>
-                </div>
-                <div class="md-pill-content">
-                    <p>Spending</p>
-                    <h3>₹<?php echo number_format($monthly_expense); ?></h3>
-                </div>
-            </div>
-            <div class="md-pill income">
-                <div class="md-pill-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <polyline points="19 12 12 19 5 12"></polyline>
-                    </svg>
-                </div>
-                <div class="md-pill-content">
-                    <p>Income</p>
-                    <h3>₹<?php echo number_format($monthly_income); ?></h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="md-balance-badge">
-            Balance: ₹<?php echo number_format($net_profit); ?>
-        </div>
-
         <!-- Recent Transactions List -->
         <div class="md-section-header">
-            <h3>Recent transactions</h3>
+            <h3>Recent Transactions</h3>
             <a href="transactions/view_transactions.php">See all</a>
         </div>
 
@@ -418,33 +405,68 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
             mysqli_data_seek($transactions, 0);
             while ($row = mysqli_fetch_assoc($transactions)) {
                 $isIncome = $row['type'] == 'Income';
-                $color = $isIncome ? '#10b981' : '#f59e0b';
-                // Pick a generic icon based on category logic or fallback
-                $icon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
-                if (strpos(strtolower($row['category_name']), 'food') !== false) {
-                    $icon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>';
-                } else if (strpos(strtolower($row['category_name']), 'bill') !== false) {
-                    $icon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>';
+                $isTransfer = $row['type'] == 'Transfer';
+                
+                if ($isTransfer) {
+                    $color = '#3b82f6';
+                } elseif ($isIncome) {
+                    $color = '#10b981';
+                } else {
+                    $color = '#f59e0b';
                 }
+                
+                // Category-based icons
+                $icon_svg = '';
+                if ($isTransfer) {
+                    $icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>';
+                } elseif (strpos(strtolower($row['category_name'] ?? ''), 'food') !== false) {
+                    $icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>';
+                } elseif (strpos(strtolower($row['category_name'] ?? ''), 'bill') !== false) {
+                    $icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>';
+                } elseif (strpos(strtolower($row['category_name'] ?? ''), 'shop') !== false || strpos(strtolower($row['category_name'] ?? ''), 'grocer') !== false) {
+                    $icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>';
+                } elseif ($isIncome) {
+                    $icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>';
+                } else {
+                    $icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+                }
+
+                $desc_text = htmlspecialchars($row['description']) ?: htmlspecialchars($row['category_name'] ?? 'Transaction');
+                $account_icon = '';
+                $account_type_lower = strtolower($row['account_name'] ?? '');
+                if (strpos($account_type_lower, 'bank') !== false) {
+                    $account_icon = '🏦';
+                } elseif (strpos($account_type_lower, 'cash') !== false) {
+                    $account_icon = '💵';
+                } else {
+                    $account_icon = '🏦';
+                }
+
+                $txn_date = strtotime($row['transaction_date']);
+                $today = strtotime(date('Y-m-d'));
+                $yesterday = strtotime('-1 day');
+                if ($txn_date == $today) {
+                    $date_label = 'Today';
+                } elseif ($txn_date == $yesterday) {
+                    $date_label = 'Yesterday';
+                } else {
+                    $date_label = date('d M', $txn_date);
+                }
+                
+                $amount_color = $isIncome ? '#10b981' : ($isTransfer ? '#3b82f6' : 'var(--text-main)');
                 ?>
                 <div class="md-txn-item"
                     onclick="window.location='transactions/edit_transaction.php?id=<?php echo $row['id']; ?>'">
-                    <div class="md-txn-icon">
-                        <?php echo $icon; ?>
+                    <div class="md-txn-icon" style="background: <?php echo $color; ?>15;">
+                        <?php echo $icon_svg; ?>
                     </div>
                     <div class="md-txn-details">
-                        <h4>₹<?php echo number_format($row['amount'], 1); ?></h4>
-                        <p>For
-                            <?php echo htmlspecialchars($row['description']) ?: htmlspecialchars($row['category_name']); ?>
-                        </p>
+                        <h4><?php echo $desc_text; ?></h4>
+                        <p><?php echo $account_icon; ?> <?php echo htmlspecialchars($row['account_name']); ?><?php if ($isTransfer && strpos($row['description'], '→') !== false) { echo ' → ...'; } ?></p>
                     </div>
                     <div class="md-txn-meta">
-                        <span><?php echo date('d M y', strtotime($row['transaction_date'])); ?></span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="#06b6d4" stroke-width="2">
-                            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-                            <line x1="2" y1="10" x2="22" y2="10"></line>
-                        </svg>
+                        <span class="md-txn-amount" style="color: <?php echo $amount_color; ?>">₹<?php echo number_format($row['amount'], 1); ?></span>
+                        <span class="md-txn-date"><?php echo $date_label; ?></span>
                     </div>
                 </div>
             <?php } ?>
@@ -452,33 +474,38 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
 
         <!-- Budgets Mobile Card -->
         <div class="md-section-header">
-            <h3>Your budgets</h3>
+            <h3>Budgets</h3>
         </div>
 
         <div class="md-budget-card">
-            <div class="md-budget-info">
+            <div class="md-budget-tabs">
+                <button class="md-budget-tab active" data-tab="monthly">Monthly</button>
+                <button class="md-budget-tab" data-tab="annual">Annual</button>
+            </div>
+            <div class="md-budget-content">
+                <div class="md-budget-icon-wrapper">
+                    <div class="md-budget-icon-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path>
+                        </svg>
+                    </div>
+                </div>
                 <?php if ($monthly_budget > 0) {
                     $pct = round(($monthly_expense / $monthly_budget) * 100);
                     ?>
                     <h4>Monthly Budget (<?php echo min($pct, 100); ?>%)</h4>
-                    <p>You have spent ₹<?php echo number_format($monthly_expense); ?> out of
-                        ₹<?php echo number_format($monthly_budget); ?>.</p>
+                    <p>₹<?php echo number_format($monthly_expense); ?> / ₹<?php echo number_format($monthly_budget); ?> spent</p>
+                    <div class="progress-bar" style="margin-top: 12px;">
+                        <div class="progress-fill <?php echo $pct > 100 ? 'danger' : ($pct > 75 ? 'warning' : ''); ?>" style="width: <?php echo min($pct, 100); ?>%"></div>
+                    </div>
                 <?php } else { ?>
-                    <h4>No Budget for This Month?</h4>
-                    <p>Setting a budget for your spending is a crucial step in achieving your financial goals.</p>
+                    <h4>No Budget Set</h4>
+                    <p>Set a budget to track your spending goals.</p>
                 <?php } ?>
-                <a href="budgets/set_budget.php" class="btn btn-secondary"
-                    style="background:var(--surface);color:var(--text-main);">
+                <a href="budgets/set_budget.php" class="md-budget-action-btn">
                     <?php echo $monthly_budget > 0 ? 'Edit Budget' : 'Set Up Budget'; ?>
                 </a>
-            </div>
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none"
-                    stroke="var(--warning)" stroke-width="1.5">
-                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                    <line x1="12" y1="11" x2="12" y2="17"></line>
-                    <line x1="9" y1="14" x2="15" y2="14"></line>
-                </svg>
             </div>
         </div>
 
@@ -558,7 +585,7 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
         var greetEl = document.getElementById('mobileGreeting');
         if (greetEl) {
             var h = new Date().getHours();
-            greetEl.textContent = h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
+            greetEl.textContent = h < 12 ? 'Good Morning,' : h < 17 ? 'Good Afternoon,' : 'Good Evening,';
         }
 
         // === Mobile Theme Toggle ===
@@ -578,9 +605,9 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
         // === Time Period Dropdown ===
         var dropdownBtn = document.getElementById('mdDropdownBtn');
         var dropdownMenu = document.getElementById('mdDropdownMenu');
-        var spendingEl = document.querySelector('.md-pill.spending .md-pill-content h3');
-        var incomeEl = document.querySelector('.md-pill.income .md-pill-content h3');
-        var balanceBadge = document.querySelector('.md-balance-badge');
+        var spendingEl = document.getElementById('mdSpending');
+        var incomeEl = document.getElementById('mdIncome');
+        var netBalanceEl = document.getElementById('mdNetBalance');
 
         if (dropdownBtn && dropdownMenu) {
             dropdownBtn.addEventListener('click', function (e) {
@@ -599,7 +626,7 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
                     this.classList.add('active');
                     var period = this.dataset.period;
                     var label = this.querySelector('strong').textContent;
-                    dropdownBtn.innerHTML = label + ' <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+                    dropdownBtn.innerHTML = label + ' <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>';
                     dropdownMenu.classList.remove('open');
                     filterByPeriod(period);
                 });
@@ -610,6 +637,9 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
             var now = new Date();
             var spending = 0, income = 0;
             allTxns.forEach(function (t) {
+                // Skip transfers — they should never affect spending/income
+                if (t.type === 'Transfer') return;
+                
                 var d = new Date(t.transaction_date);
                 var inRange = false;
                 if (period === 'month') {
@@ -626,7 +656,7 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
             });
             if (spendingEl) spendingEl.textContent = '₹' + spending.toLocaleString('en-IN');
             if (incomeEl) incomeEl.textContent = '₹' + income.toLocaleString('en-IN');
-            if (balanceBadge) balanceBadge.textContent = 'Balance: ₹' + (income - spending).toLocaleString('en-IN');
+            if (netBalanceEl) netBalanceEl.textContent = '₹' + (income - spending).toLocaleString('en-IN');
         }
 
         // === Global Search ===
@@ -661,17 +691,25 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
                 }
                 var html = '';
                 matches.forEach(function (t) {
-                    var color = t.type === 'Income' ? '#10b981' : '#f59e0b';
+                    var color = t.type === 'Income' ? '#10b981' : (t.type === 'Transfer' ? '#3b82f6' : '#f59e0b');
                     var dateStr = new Date(t.transaction_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' });
                     html += '<div class="md-txn-item" onclick="window.location=\'transactions/edit_transaction.php?id=' + t.id + '\'">';
-                    html += '<div class="md-txn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg></div>';
-                    html += '<div class="md-txn-details"><h4>₹' + parseFloat(t.amount).toLocaleString('en-IN') + '</h4>';
-                    html += '<p>' + (t.description || t.category_name || '') + '</p></div>';
-                    html += '<div class="md-txn-meta"><span>' + dateStr + '</span></div></div>';
+                    html += '<div class="md-txn-icon" style="background: ' + color + '15;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg></div>';
+                    html += '<div class="md-txn-details"><h4>' + (t.description || t.category_name || 'Transaction') + '</h4>';
+                    html += '<p>' + (t.account_name || '') + '</p></div>';
+                    html += '<div class="md-txn-meta"><span class="md-txn-amount">₹' + parseFloat(t.amount).toLocaleString('en-IN') + '</span><span class="md-txn-date">' + dateStr + '</span></div></div>';
                 });
                 searchResults.innerHTML = html;
             });
         }
+
+        // === Budget Tabs ===
+        document.querySelectorAll('.md-budget-tab').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.md-budget-tab').forEach(function(t) { t.classList.remove('active'); });
+                this.classList.add('active');
+            });
+        });
     })();
 </script>
 

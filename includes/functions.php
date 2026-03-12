@@ -13,7 +13,14 @@ function getAccountBalance($conn, $account_id)
     $expense_query = mysqli_query($conn, "SELECT SUM(amount) as total FROM transactions WHERE account_id=$account_id AND type='Expense'");
     $expense = mysqli_fetch_assoc($expense_query)['total'] ?? 0;
 
-    return $opening_balance + $income - $expense;
+    // Transfer In adds money, Transfer Out removes money
+    $transfer_in_query = mysqli_query($conn, "SELECT SUM(amount) as total FROM transactions WHERE account_id=$account_id AND type='Transfer' AND description LIKE 'Transfer In%'");
+    $transfer_in = mysqli_fetch_assoc($transfer_in_query)['total'] ?? 0;
+
+    $transfer_out_query = mysqli_query($conn, "SELECT SUM(amount) as total FROM transactions WHERE account_id=$account_id AND type='Transfer' AND description LIKE 'Transfer Out%'");
+    $transfer_out = mysqli_fetch_assoc($transfer_out_query)['total'] ?? 0;
+
+    return $opening_balance + $income - $expense + $transfer_in - $transfer_out;
 }
 
 

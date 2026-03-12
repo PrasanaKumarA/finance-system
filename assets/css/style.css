@@ -893,6 +893,11 @@ button:active,
     color: var(--danger);
 }
 
+.badge-transfer {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
 .badge-admin {
     background: var(--primary-light);
     color: var(--primary);
@@ -2128,7 +2133,8 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
 
     /* App-Like Dashboard Styles */
     .mobile-dashboard {
-        padding: 24px 20px;
+        padding: 20px 16px;
+        padding-bottom: 90px;
         color: var(--text-main);
     }
 
@@ -2140,260 +2146,28 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
     }
 
     .md-greeting p {
-        font-size: 14px;
+        font-size: 13px;
         color: var(--text-muted);
         margin: 0;
+        font-weight: 400;
     }
 
     .md-greeting h1 {
-        font-size: 24px;
-        font-weight: 500;
-        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
+        margin: 2px 0 0 0;
         letter-spacing: -0.02em;
     }
 
-    .md-profile-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: #1f1f1f;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .md-profile-icon img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .md-month-selector {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .md-month-selector h2 {
-        font-size: 20px;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .md-pills-row {
-        display: flex;
-        gap: 12px;
-        margin-bottom: 30px;
-    }
-
-    .md-pill {
-        flex: 1;
-        padding: 16px;
-        border-radius: 28px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .md-pill.spending {
-        background: #d46f7e;
-        color: white;
-    }
-
-    .md-pill.income {
-        background: #5b8c62;
-        color: white;
-    }
-
-    .md-pill-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .md-pill-content p {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.8);
-        margin: 0 0 2px 0;
-    }
-
-    .md-pill-content h3 {
-        font-size: 18px;
-        color: white;
-        margin: 0;
-    }
-
-    .md-balance-badge {
-        background: var(--surface);
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: 14px;
-        display: inline-block;
-        margin: 0 auto;
-        border: 1px solid var(--border);
-        text-align: center;
-        position: relative;
-        top: -15px;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    .md-section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        margin-bottom: 16px;
-    }
-
-    .md-section-header h3 {
-        font-size: 18px;
-        margin: 0;
-    }
-
-    .md-section-header a {
-        font-size: 13px;
-        color: var(--text-muted);
-    }
-
-    /* Transaction List Items */
-    .md-txn-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        margin-bottom: 32px;
-    }
-
-    .md-txn-item {
-        background: var(--surface);
-        padding: 16px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-    }
-
-    .md-txn-icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.05);
-        /* very subtle back */
-    }
-
-    .md-txn-details {
-        flex: 1;
-    }
-
-    .md-txn-details h4 {
-        margin: 0 0 4px 0;
-        font-size: 16px;
-        color: var(--text-main);
-    }
-
-    .md-txn-details p {
-        margin: 0;
-        font-size: 13px;
-        color: var(--text-muted);
-    }
-
-    .md-txn-meta {
-        text-align: right;
-    }
-
-    .md-txn-meta span {
-        display: block;
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-bottom: 4px;
-    }
-
-    /* Mobile Budgets */
-    .md-budget-card {
-        background: var(--surface);
-        border-radius: 16px;
-        padding: 20px;
-        margin-bottom: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .md-budget-info h4 {
-        margin: 0 0 8px 0;
-        font-size: 16px;
-    }
-
-    .md-budget-info p {
-        margin: 0 0 16px 0;
-        font-size: 12px;
-        color: var(--text-muted);
-        max-width: 200px;
-    }
-
-    .md-budget-card img {
-        width: 60px;
-        height: auto;
-    }
-
-    /* Floating more menu */
-    .mobile-sidebar {
-        position: fixed;
-        bottom: -100%;
-        left: 0;
-        width: 100%;
-        background: var(--surface);
-        border-top-left-radius: 24px;
-        border-top-right-radius: 24px;
-        z-index: 1000;
-        transition: bottom 0.3s ease;
-        padding: 24px;
-        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
-    }
-
-    .mobile-sidebar.active {
-        bottom: 0;
-    }
-
-    .mobile-sidebar-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .mobile-sidebar-header h3 {
-        margin: 0;
-    }
-
-    .close-btn {
-        background: none;
-        border: none;
-        color: var(--text-muted);
-        box-shadow: none;
-        padding: 0;
-    }
-
-    /* === Mobile Header Actions === */
     .md-header-actions {
         display: flex;
         align-items: center;
         gap: 10px;
     }
 
-    .md-theme-toggle {
-        width: 40px;
-        height: 40px;
+    .md-icon-btn {
+        width: 42px;
+        height: 42px;
         border-radius: 50%;
         border: 1px solid var(--border);
         background: var(--surface);
@@ -2406,40 +2180,74 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
         overflow: hidden;
         box-shadow: none;
         transition: all 0.2s ease;
-        margin-top: -4px;
+        color: var(--text-muted);
+        padding: 0;
     }
 
-    .md-theme-toggle:hover {
+    .md-icon-btn:hover {
         background: var(--primary-light);
         border-color: var(--primary);
+        color: var(--primary);
         transform: none;
         box-shadow: none;
     }
 
-    .md-theme-toggle .icon-sun,
-    .md-theme-toggle .icon-moon {
+    .md-diamond-btn {
+        background: linear-gradient(135deg, #f59e0b, #f97316);
+        border: none;
+        color: white;
+    }
+
+    .md-diamond-btn:hover {
+        background: linear-gradient(135deg, #d97706, #ea580c);
+        border: none;
+        color: white;
+    }
+
+    .md-diamond-btn .icon-sun,
+    .md-diamond-btn .icon-moon {
         position: absolute;
         transition: all 0.3s ease;
     }
 
-    .md-theme-toggle .icon-sun {
+    .md-diamond-btn .icon-sun {
         opacity: 1;
         transform: scale(1);
     }
 
-    .md-theme-toggle .icon-moon {
+    .md-diamond-btn .icon-moon {
         opacity: 0;
         transform: scale(0.5);
     }
 
-    [data-theme="dark"] .md-theme-toggle .icon-sun {
+    [data-theme="dark"] .md-diamond-btn .icon-sun {
         opacity: 0;
         transform: scale(0.5);
     }
 
-    [data-theme="dark"] .md-theme-toggle .icon-moon {
+    [data-theme="dark"] .md-diamond-btn .icon-moon {
         opacity: 1;
         transform: scale(1);
+    }
+
+    .md-profile-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        text-decoration: none;
+        flex-shrink: 0;
+    }
+
+    .md-profile-icon img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
     }
 
     .md-avatar-fallback {
@@ -2451,25 +2259,142 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
         align-items: center;
         justify-content: center;
         color: white;
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 700;
     }
 
-    /* === Dropdown Menu === */
-    .md-dropdown-wrapper {
+    /* === Cash Flow Card === */
+    .md-cashflow-card {
+        background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        border-radius: 20px;
+        padding: 22px 20px 18px;
+        margin-bottom: 24px;
         position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
 
-    #mdDropdownBtn {
+    .md-cashflow-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -30%;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .md-cashflow-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .md-cashflow-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .md-cashflow-period {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 13px;
+        font-weight: 500;
         cursor: pointer;
-        user-select: none;
+        box-shadow: none;
+        transition: all 0.2s ease;
+    }
+
+    .md-cashflow-period:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: none;
+        box-shadow: none;
+    }
+
+    .md-cashflow-amounts {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+    }
+
+    .md-cashflow-col {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .md-cashflow-col.right {
+        text-align: right;
+        align-items: flex-end;
+    }
+
+    .md-cf-type {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .md-cf-type.spending {
+        color: #f87171;
+    }
+
+    .md-cf-type.income {
+        color: #34d399;
+    }
+
+    .md-cf-value {
+        font-size: 26px;
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+    }
+
+    .md-cashflow-balance {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 10px 16px;
+    }
+
+    .md-cf-balance-label {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 500;
+    }
+
+    .md-cf-balance-value {
+        font-size: 16px;
+        font-weight: 700;
+        color: #ffffff;
+    }
+
+    /* === Dropdown Menu (inside cashflow) === */
+    .md-dropdown-wrapper {
+        position: relative;
     }
 
     .md-dropdown-menu {
         display: none;
         position: absolute;
-        top: 100%;
-        left: 0;
+        top: calc(100% + 8px);
+        right: 0;
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: var(--radius-md);
@@ -2512,27 +2437,208 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
         color: var(--text-muted);
     }
 
-    /* === Search Button === */
-    .md-search-btn {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        border: none;
-        background: transparent;
+    /* === Section Headers === */
+    .md-section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 16px;
+    }
+
+    .md-section-header h3 {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .md-section-header a {
+        font-size: 13px;
         color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    /* === Transaction List Items === */
+    .md-txn-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 32px;
+    }
+
+    .md-txn-item {
+        background: var(--surface);
+        padding: 14px 16px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
         cursor: pointer;
+        transition: all 0.15s ease;
+        border: 1px solid transparent;
+    }
+
+    .md-txn-item:hover {
+        border-color: var(--border);
+    }
+
+    .md-txn-item:active {
+        transform: scale(0.98);
+    }
+
+    .md-txn-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: none;
-        padding: 0;
-        transition: color 0.15s ease;
+        flex-shrink: 0;
     }
 
-    .md-search-btn:hover {
+    .md-txn-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .md-txn-details h4 {
+        margin: 0 0 3px 0;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-main);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .md-txn-details p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .md-txn-meta {
+        text-align: right;
+        flex-shrink: 0;
+    }
+
+    .md-txn-amount {
+        display: block;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 3px;
+    }
+
+    .md-txn-date {
+        display: block;
+        font-size: 11px;
+        color: var(--text-muted);
+    }
+
+    /* === Mobile Budgets === */
+    .md-budget-card {
+        background: var(--surface);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+
+    .md-budget-tabs {
+        display: flex;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        padding: 4px;
+        margin-bottom: 20px;
+        gap: 4px;
+    }
+
+    .md-budget-tab {
+        flex: 1;
+        padding: 10px 16px;
+        border: none;
+        background: transparent;
+        border-radius: 24px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        box-shadow: none;
+    }
+
+    .md-budget-tab:hover {
         color: var(--text-main);
         transform: none;
         box-shadow: none;
+    }
+
+    .md-budget-tab.active {
+        background: var(--text-muted);
+        color: var(--background);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    [data-theme="dark"] .md-budget-tab.active {
+        background: rgba(255, 255, 255, 0.15);
+        color: var(--text-main);
+    }
+
+    .md-budget-content {
+        text-align: center;
+    }
+
+    .md-budget-icon-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+    .md-budget-icon-circle {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+    }
+
+    .md-budget-content h4 {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0 0 6px 0;
+        color: var(--text-main);
+    }
+
+    .md-budget-content p {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin: 0 0 12px 0;
+    }
+
+    .md-budget-action-btn {
+        display: inline-flex;
+        padding: 10px 24px;
+        background: var(--surface-hover);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        color: var(--text-main);
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.15s ease;
+        margin-top: 8px;
+    }
+
+    .md-budget-action-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
     }
 
     /* === Search Overlay === */
@@ -2606,6 +2712,50 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
         color: var(--text-muted);
         font-size: 15px;
     }
+
+    /* === Floating more menu === */
+    .mobile-sidebar {
+        position: fixed;
+        bottom: -100%;
+        left: 0;
+        width: 100%;
+        background: var(--surface);
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+        z-index: 1000;
+        transition: bottom 0.3s ease;
+        padding: 24px;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .mobile-sidebar.active {
+        bottom: 0;
+    }
+
+    .mobile-sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .mobile-sidebar-header h3 {
+        margin: 0;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        box-shadow: none;
+        padding: 0;
+    }
+
+    /* FAB hidden when on mobile dashboard */
+    .mobile-dashboard~.fab {
+        display: none;
+    }
+
 
     /* === Mobile Accounts Redesign === */
     .mobile-accounts {
