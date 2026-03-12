@@ -52,9 +52,10 @@ while ($row = mysqli_fetch_assoc($results)) {
     $rows[] = $row;
     if ($row['type'] == 'Income') {
         $total_income += $row['amount'];
-    } else {
+    } elseif ($row['type'] == 'Expense') {
         $total_expense += $row['amount'];
     }
+    // Transfers are excluded from income/expense totals
 }
 
 $net = $total_income - $total_expense;
@@ -112,6 +113,7 @@ $categories = mysqli_query($conn, "SELECT * FROM categories");
                             <option value="">All</option>
                             <option value="Income" <?= $type == 'Income' ? 'selected' : '' ?>>Income</option>
                             <option value="Expense" <?= $type == 'Expense' ? 'selected' : '' ?>>Expense</option>
+                            <option value="Transfer" <?= $type == 'Transfer' ? 'selected' : '' ?>>Transfer</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -185,11 +187,11 @@ $categories = mysqli_query($conn, "SELECT * FROM categories");
                             <td><?= htmlspecialchars($r['category_name'] ?? '-') ?></td>
                             <td><?= htmlspecialchars($r['description']) ?></td>
                             <td>
-                                <span class="badge <?= $r['type'] == 'Income' ? 'badge-income' : 'badge-expense' ?>">
+                                <span class="badge <?= $r['type'] == 'Income' ? 'badge-income' : ($r['type'] == 'Transfer' ? 'badge-transfer' : 'badge-expense') ?>">
                                     <?= $r['type'] ?>
                                 </span>
                             </td>
-                            <td class="<?= $r['type'] == 'Income' ? 'text-success' : 'text-danger' ?>">
+                            <td class="<?= $r['type'] == 'Income' ? 'text-success' : ($r['type'] == 'Transfer' ? 'text-warning' : 'text-danger') ?>">
                                 ₹ <?= number_format($r['amount'], 2) ?>
                             </td>
                         </tr>
@@ -428,7 +430,8 @@ $categories = mysqli_query($conn, "SELECT * FROM categories");
             var income = 0, expense = 0;
             txns.forEach(function (t) {
                 if (t.type === 'Income') income += parseFloat(t.amount);
-                else expense += parseFloat(t.amount);
+                else if (t.type === 'Expense') expense += parseFloat(t.amount);
+                // Transfers are excluded from income/expense totals
             });
             var incEl = document.getElementById('maIncome');
             var expEl = document.getElementById('maExpense');
@@ -447,14 +450,15 @@ $categories = mysqli_query($conn, "SELECT * FROM categories");
             }
             var html = '';
             txns.forEach(function (t) {
-                var color = t.type === 'Income' ? '#10b981' : '#f59e0b';
+                var color = t.type === 'Income' ? '#10b981' : (t.type === 'Transfer' ? '#3b82f6' : '#f59e0b');
+                var badgeClass = t.type === 'Income' ? 'badge-income' : (t.type === 'Transfer' ? 'badge-transfer' : 'badge-expense');
                 var dateStr = new Date(t.transaction_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' });
                 html += '<div class="md-txn-item">';
-                html += '<div class="md-txn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg></div>';
-                html += '<div class="md-txn-details"><h4>₹' + parseFloat(t.amount).toLocaleString('en-IN') + '</h4>';
-                html += '<p>' + (t.description || t.category_name || '') + '</p></div>';
-                html += '<div class="md-txn-meta"><span>' + dateStr + '</span>';
-                html += '<span class="badge ' + (t.type === 'Income' ? 'badge-income' : 'badge-expense') + '" style="font-size:10px;padding:2px 6px;">' + t.type + '</span></div></div>';
+                html += '<div class="md-txn-icon" style="background:' + color + '15;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg></div>';
+                html += '<div class="md-txn-details"><h4>' + (t.description || t.category_name || 'Transaction') + '</h4>';
+                html += '<p>₹' + parseFloat(t.amount).toLocaleString('en-IN') + '</p></div>';
+                html += '<div class="md-txn-meta"><span class="md-txn-date">' + dateStr + '</span>';
+                html += '<span class="badge ' + badgeClass + '" style="font-size:10px;padding:2px 6px;">' + t.type + '</span></div></div>';
             });
             list.innerHTML = html;
         }

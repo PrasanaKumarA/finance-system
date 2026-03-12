@@ -2270,7 +2270,6 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
         padding: 22px 20px 18px;
         margin-bottom: 24px;
         position: relative;
-        overflow: hidden;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
 
@@ -2283,6 +2282,7 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
         height: 200px;
         background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
         pointer-events: none;
+        clip-path: inset(0 0 0 0 round 20px);
     }
 
     .md-cashflow-header {
