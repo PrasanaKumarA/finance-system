@@ -7,7 +7,7 @@
     <title>Finance System</title>
     <link rel="icon" type="image/jpeg" href="<?php echo BASE_PATH; ?>/assets/images/favi.JPG">
     <link rel="apple-touch-icon" href="<?php echo BASE_PATH; ?>/assets/images/favi.JPG">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.php">
     <meta name="theme-color" content="#4F46E5">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
