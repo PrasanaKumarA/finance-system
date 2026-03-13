@@ -2725,9 +2725,12 @@ input[type="radio"]#type-expense:checked+.type-card.expense {
         background: var(--surface);
         border-top-left-radius: 24px;
         border-top-right-radius: 24px;
-        z-index: 1000;
+        z-index: 10000;
         transition: bottom 0.3s ease;
         padding: 24px;
+        padding-bottom: 100px;
+        max-height: 85vh;
+        overflow-y: auto;
         box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
     }
 
