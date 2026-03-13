@@ -8,36 +8,37 @@
     <link rel="icon" type="image/jpeg" href="<?php echo BASE_PATH; ?>/assets/images/favi.JPG">
     <link rel="apple-touch-icon" href="<?php echo BASE_PATH; ?>/assets/images/favi.JPG">
     <?php
-    $manifest_path = dirname(__DIR__) . '/manifest.json';
-    if (file_exists($manifest_path)) {
-        $manifest_content = file_get_contents($manifest_path);
-        
-        // Parse the manifest to make relative URLs absolute for the data URI
-        $manifest_data = json_decode($manifest_content, true);
-        if ($manifest_data) {
-            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
-            $base_url = rtrim($protocol . $_SERVER['HTTP_HOST'] . (defined('BASE_PATH') ? BASE_PATH : ''), '/');
-            
-            if (isset($manifest_data['start_url'])) {
-                $manifest_data['start_url'] = $base_url . '/' . ltrim($manifest_data['start_url'], '/');
-            }
-            if (isset($manifest_data['icons']) && is_array($manifest_data['icons'])) {
-                foreach ($manifest_data['icons'] as &$icon) {
-                    if (isset($icon['src'])) {
-                        $icon['src'] = $base_url . '/' . ltrim($icon['src'], '/');
-                    }
+$manifest_path = dirname(__DIR__) . '/manifest.json';
+if (file_exists($manifest_path)) {
+    $manifest_content = file_get_contents($manifest_path);
+
+    // Parse the manifest to make relative URLs absolute for the data URI
+    $manifest_data = json_decode($manifest_content, true);
+    if ($manifest_data) {
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+        $base_url = rtrim($protocol . $_SERVER['HTTP_HOST'] . (defined('BASE_PATH') ? BASE_PATH : ''), '/');
+
+        if (isset($manifest_data['start_url'])) {
+            $manifest_data['start_url'] = $base_url . '/' . ltrim($manifest_data['start_url'], '/');
+        }
+        if (isset($manifest_data['icons']) && is_array($manifest_data['icons'])) {
+            foreach ($manifest_data['icons'] as &$icon) {
+                if (isset($icon['src'])) {
+                    $icon['src'] = $base_url . '/' . ltrim($icon['src'], '/');
                 }
             }
-            $manifest_content = json_encode($manifest_data);
         }
-        
-        $manifest_base64 = base64_encode($manifest_content);
-        echo '<link rel="manifest" href="data:application/manifest+json;base64,' . $manifest_base64 . '">';
-    } else {
-        echo '<link rel="manifest" href="' . (defined('BASE_PATH') ? BASE_PATH : '') . '/manifest.json" crossorigin="use-credentials">';
+        $manifest_content = json_encode($manifest_data);
     }
-    ?>
-    <meta name="theme-color" content="#4F46E5">
+
+    $manifest_base64 = base64_encode($manifest_content);
+    echo '<link rel="manifest" href="data:application/manifest+json;base64,' . $manifest_base64 . '">';
+}
+else {
+    echo '<link rel="manifest" href="' . (defined('BASE_PATH') ? BASE_PATH : '') . '/manifest.json" crossorigin="use-credentials">';
+}
+?>
+    <meta name="theme-color" content="#000000ff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -102,10 +103,11 @@ $bp = BASE_PATH;
                     </svg>
                     Admin Panel
                 </a>
-            <?php } ?>
+            <?php
+}?>
 
             <a href="<?php echo $bp; ?>/index.php"
-                class="<?php echo ($current_file == 'index.php' && ($current_dir == 'finance-system' || $current_dir == 'htdocs')) ? 'active' : ''; ?>">
+                class="<?php echo($current_file == 'index.php' && ($current_dir == 'finance-system' || $current_dir == 'htdocs')) ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="7" height="9" />
@@ -194,7 +196,7 @@ $bp = BASE_PATH;
     <!-- MOBILE BOTTOM NAVIGATION (Hidden on Desktop) -->
     <nav class="mobile-bottom-nav">
         <a href="<?php echo $bp; ?>/index.php"
-            class="<?php echo ($current_file == 'index.php' && $current_dir != 'reports' && $current_dir != 'admin') ? 'active' : ''; ?>">
+            class="<?php echo($current_file == 'index.php' && $current_dir != 'reports' && $current_dir != 'admin') ? 'active' : ''; ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -203,7 +205,7 @@ $bp = BASE_PATH;
             <span>Home</span>
         </a>
         <a href="<?php echo $bp; ?>/reports/index.php"
-            class="<?php echo ($current_dir == 'reports') ? 'active' : ''; ?>">
+            class="<?php echo($current_dir == 'reports') ? 'active' : ''; ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="20" x2="18" y2="10"></line>
@@ -224,7 +226,7 @@ $bp = BASE_PATH;
         </div>
 
         <a href="<?php echo $bp; ?>/accounts/view_accounts.php"
-            class="<?php echo ($current_dir == 'accounts') ? 'active' : ''; ?>">
+            class="<?php echo($current_dir == 'accounts') ? 'active' : ''; ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="5" width="20" height="14" rx="2"></rect>
@@ -258,7 +260,8 @@ $bp = BASE_PATH;
         <div class="sidebar-nav">
             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Admin') { ?>
                 <a href="<?php echo $bp; ?>/admin/index.php">Admin Panel</a>
-            <?php } ?>
+            <?php
+}?>
             <a href="<?php echo $bp; ?>/categories/view_categories.php">Categories</a>
             <a href="<?php echo $bp; ?>/transactions/view_transactions.php">Transactions</a>
             <a href="<?php echo $bp; ?>/budgets/set_budget.php">Budgets</a>
@@ -295,12 +298,16 @@ $bp = BASE_PATH;
                     <?php if ($profile_picture && file_exists($_SERVER['DOCUMENT_ROOT'] . $bp . '/' . $profile_picture)) { ?>
                         <img class="header-user-avatar-img"
                             src="<?php echo $bp; ?>/<?php echo htmlspecialchars($profile_picture); ?>" alt="Profile">
-                    <?php } else { ?>
+                    <?php
+    }
+    else { ?>
                         <div class="header-user-avatar"><?php echo strtoupper(substr($_SESSION['name'], 0, 1)); ?></div>
-                    <?php } ?>
+                    <?php
+    }?>
                     <span class="header-user-name"><?php echo htmlspecialchars($_SESSION['name']); ?></span>
                 </a>
-            <?php } ?>
+            <?php
+}?>
         </div>
     </header>
 
