@@ -9,14 +9,14 @@
     "theme_color": "#4F46E5",
     "icons": [
         {
-            "src": "/assets/images/favi.JPG",
+            "src": "/assets/icons/FinanceHub.png",
             "sizes": "192x192",
-            "type": "image/jpeg"
+            "type": "image/png"
         },
         {
-            "src": "/assets/images/favi.JPG",
+            "src": "/assets/icons/FinanceHub.png",
             "sizes": "512x512",
-            "type": "image/jpeg"
+            "type": "image/png"
         }
     ]
 }
