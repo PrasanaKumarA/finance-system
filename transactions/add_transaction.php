@@ -92,7 +92,7 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
         </select>
 
         <div id="transfer_fields" style="display:none;">
-            <label>Destination Account</label>
+            <label>To Account</label>
             <select name="to_account_id" id="to_account_id">
                 <?php while ($row = mysqli_fetch_assoc($to_accounts)) { ?>
                     <option value="<?php echo $row['id']; ?>"><?php echo $row['account_name']; ?></option>
@@ -154,12 +154,12 @@ $categories = mysqli_query($conn, "SELECT * FROM categories WHERE user_id=$user_
         if (selectedType === 'Transfer') {
             categorySection.style.display = 'none';
             transferFields.style.display = 'block';
-            accountLabel.innerText = 'Source Account';
+            accountLabel.innerText = 'From Account';
             categorySelect.removeAttribute('required');
         } else {
             categorySection.style.display = 'block';
             transferFields.style.display = 'none';
-            accountLabel.innerText = 'Primary Account';
+            accountLabel.innerText = 'To Account';
             filterCategories();
         }
     }

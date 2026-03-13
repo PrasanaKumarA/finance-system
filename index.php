@@ -282,11 +282,13 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
                 </tr>
                 <?php
                 mysqli_data_seek($transactions, 0);
-                while ($row = mysqli_fetch_assoc($transactions)) { 
+                while ($row = mysqli_fetch_assoc($transactions)) {
                     $badge_class = 'badge-expense';
-                    if ($row['type'] == 'Income') $badge_class = 'badge-income';
-                    elseif ($row['type'] == 'Transfer') $badge_class = 'badge-transfer';
-                ?>
+                    if ($row['type'] == 'Income')
+                        $badge_class = 'badge-income';
+                    elseif ($row['type'] == 'Transfer')
+                        $badge_class = 'badge-transfer';
+                    ?>
                     <tr>
                         <td><?php echo $row['transaction_date']; ?></td>
                         <td><?php echo $row['account_name']; ?></td>
@@ -297,7 +299,8 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
                                 <?php echo $row['type']; ?>
                             </span>
                         </td>
-                        <td class="<?php echo $row['type'] == 'Income' ? 'text-success' : ($row['type'] == 'Transfer' ? 'text-warning' : 'text-danger'); ?>">
+                        <td
+                            class="<?php echo $row['type'] == 'Income' ? 'text-success' : ($row['type'] == 'Transfer' ? 'text-warning' : 'text-danger'); ?>">
                             ₹ <?php echo number_format($row['amount'], 2); ?>
                         </td>
                         <td>
@@ -346,7 +349,10 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
                 <span class="md-cashflow-label">CASH FLOW</span>
                 <div class="md-dropdown-wrapper">
                     <button class="md-cashflow-period" id="mdDropdownBtn" type="button">
-                        This Month <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        This Month <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
                     </button>
                     <div class="md-dropdown-menu" id="mdDropdownMenu">
                         <div class="md-dropdown-item active" data-period="month">
@@ -406,7 +412,7 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
             while ($row = mysqli_fetch_assoc($transactions)) {
                 $isIncome = $row['type'] == 'Income';
                 $isTransfer = $row['type'] == 'Transfer';
-                
+
                 if ($isTransfer) {
                     $color = '#3b82f6';
                 } elseif ($isIncome) {
@@ -414,7 +420,7 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
                 } else {
                     $color = '#f59e0b';
                 }
-                
+
                 // Category-based icons
                 $icon_svg = '';
                 if ($isTransfer) {
@@ -452,7 +458,7 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
                 } else {
                     $date_label = date('d M', $txn_date);
                 }
-                
+
                 $amount_color = $isIncome ? '#10b981' : ($isTransfer ? '#3b82f6' : 'var(--text-main)');
                 ?>
                 <div class="md-txn-item"
@@ -462,10 +468,15 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
                     </div>
                     <div class="md-txn-details">
                         <h4><?php echo $desc_text; ?></h4>
-                        <p><?php echo $account_icon; ?> <?php echo htmlspecialchars($row['account_name']); ?><?php if ($isTransfer && strpos($row['description'], '→') !== false) { echo ' → ...'; } ?></p>
+                        <p><?php echo $account_icon; ?>
+                            <?php echo htmlspecialchars($row['account_name']); ?>    <?php if ($isTransfer && strpos($row['description'], '→') !== false) {
+                                       echo ' → ...';
+                                   } ?>
+                        </p>
                     </div>
                     <div class="md-txn-meta">
-                        <span class="md-txn-amount" style="color: <?php echo $amount_color; ?>">₹<?php echo number_format($row['amount'], 1); ?></span>
+                        <span class="md-txn-amount"
+                            style="color: <?php echo $amount_color; ?>">₹<?php echo number_format($row['amount'], 1); ?></span>
                         <span class="md-txn-date"><?php echo $date_label; ?></span>
                     </div>
                 </div>
@@ -485,7 +496,8 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
             <div class="md-budget-content">
                 <div class="md-budget-icon-wrapper">
                     <div class="md-budget-icon-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5">
                             <line x1="12" y1="1" x2="12" y2="23"></line>
                             <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path>
                         </svg>
@@ -495,9 +507,11 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
                     $pct = round(($monthly_expense / $monthly_budget) * 100);
                     ?>
                     <h4>Monthly Budget (<?php echo min($pct, 100); ?>%)</h4>
-                    <p>₹<?php echo number_format($monthly_expense); ?> / ₹<?php echo number_format($monthly_budget); ?> spent</p>
+                    <p>₹<?php echo number_format($monthly_expense); ?> / ₹<?php echo number_format($monthly_budget); ?>
+                        spent</p>
                     <div class="progress-bar" style="margin-top: 12px;">
-                        <div class="progress-fill <?php echo $pct > 100 ? 'danger' : ($pct > 75 ? 'warning' : ''); ?>" style="width: <?php echo min($pct, 100); ?>%"></div>
+                        <div class="progress-fill <?php echo $pct > 100 ? 'danger' : ($pct > 75 ? 'warning' : ''); ?>"
+                            style="width: <?php echo min($pct, 100); ?>%"></div>
                     </div>
                 <?php } else { ?>
                     <h4>No Budget Set</h4>
@@ -639,7 +653,7 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
             allTxns.forEach(function (t) {
                 // Skip transfers — they should never affect spending/income
                 if (t.type === 'Transfer') return;
-                
+
                 var d = new Date(t.transaction_date);
                 var inRange = false;
                 if (period === 'month') {
@@ -704,13 +718,26 @@ while ($txn = mysqli_fetch_assoc($all_txn_query)) {
         }
 
         // === Budget Tabs ===
-        document.querySelectorAll('.md-budget-tab').forEach(function(tab) {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.md-budget-tab').forEach(function(t) { t.classList.remove('active'); });
+        document.querySelectorAll('.md-budget-tab').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                document.querySelectorAll('.md-budget-tab').forEach(function (t) { t.classList.remove('active'); });
                 this.classList.add('active');
             });
         });
     })();
+</script>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function (registration) {
+                    console.log('ServiceWorker registered:', registration.scope);
+                })
+                .catch(function (error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        });
+    }
 </script>
 
 <?php include "includes/footer.php"; ?>
