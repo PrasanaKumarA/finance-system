@@ -2,14 +2,10 @@ DirectoryIndex index.php
 
 RewriteEngine On
 
-# DO NOT rewrite PWA files
+# Do NOT rewrite PWA related files
 RewriteRule ^manifest\.php$ - [L]
+RewriteRule ^manifest\.webmanifest$ - [L]
 RewriteRule ^service-worker\.js$ - [L]
-
-# Redirect to index.php if no specific file is requested
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^$ index.php [L]
 
 # Prevent directory listing
 Options -Indexes
@@ -17,3 +13,9 @@ Options -Indexes
 # Correct MIME types
 AddType application/json .json
 AddType application/javascript .js
+AddType application/manifest+json .webmanifest
+
+# Redirect all non-existing files to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php [L]
