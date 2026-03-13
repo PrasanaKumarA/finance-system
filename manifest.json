@@ -9,12 +9,12 @@
     "theme_color": "#4F46E5",
     "icons": [
         {
-            "src": "/assets/icons/FinanceHub.png",
+            "src": "/assets/icons/Finance_icon.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/assets/icons/FinanceHub.png",
+            "src": "/assets/icons/Finance_icon.png",
             "sizes": "512x512",
             "type": "image/png"
         }
