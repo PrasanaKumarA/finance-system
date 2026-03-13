@@ -5,6 +5,7 @@ RewriteEngine On
 # Do NOT rewrite PWA related files
 RewriteRule ^manifest\.php$ - [L]
 RewriteRule ^manifest\.webmanifest$ - [L]
+RewriteRule ^manifest\.json$ - [L]
 RewriteRule ^service-worker\.js$ - [L]
 
 # Prevent directory listing

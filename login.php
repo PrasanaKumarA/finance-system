@@ -158,10 +158,30 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
     $manifest_path = __DIR__ . '/manifest.json';
     if (file_exists($manifest_path)) {
         $manifest_content = file_get_contents($manifest_path);
+        
+        // Parse the manifest to make relative URLs absolute for the data URI
+        $manifest_data = json_decode($manifest_content, true);
+        if ($manifest_data) {
+            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+            $base_url = rtrim($protocol . $_SERVER['HTTP_HOST'] . (defined('BASE_PATH') ? BASE_PATH : ''), '/');
+            
+            if (isset($manifest_data['start_url'])) {
+                $manifest_data['start_url'] = $base_url . '/' . ltrim($manifest_data['start_url'], '/');
+            }
+            if (isset($manifest_data['icons']) && is_array($manifest_data['icons'])) {
+                foreach ($manifest_data['icons'] as &$icon) {
+                    if (isset($icon['src'])) {
+                        $icon['src'] = $base_url . '/' . ltrim($icon['src'], '/');
+                    }
+                }
+            }
+            $manifest_content = json_encode($manifest_data);
+        }
+        
         $manifest_base64 = base64_encode($manifest_content);
         echo '<link rel="manifest" href="data:application/manifest+json;base64,' . $manifest_base64 . '">';
     } else {
-        echo '<link rel="manifest" href="' . BASE_PATH . '/manifest.json">';
+        echo '<link rel="manifest" href="' . (defined('BASE_PATH') ? BASE_PATH : '') . '/manifest.json" crossorigin="use-credentials">';
     }
     ?>
     <meta name="theme-color" content="#4F46E5">
