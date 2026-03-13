@@ -7,7 +7,16 @@
     <title>Finance System</title>
     <link rel="icon" type="image/jpeg" href="<?php echo BASE_PATH; ?>/assets/images/favi.JPG">
     <link rel="apple-touch-icon" href="<?php echo BASE_PATH; ?>/assets/images/favi.JPG">
-    <link rel="manifest" href="<?php echo BASE_PATH; ?>/manifest.json">
+    <?php
+    $manifest_path = dirname(__DIR__) . '/manifest.json';
+    if (file_exists($manifest_path)) {
+        $manifest_content = file_get_contents($manifest_path);
+        $manifest_base64 = base64_encode($manifest_content);
+        echo '<link rel="manifest" href="data:application/manifest+json;base64,' . $manifest_base64 . '">';
+    } else {
+        echo '<link rel="manifest" href="' . BASE_PATH . '/manifest.json" crossorigin="use-credentials">';
+    }
+    ?>
     <meta name="theme-color" content="#4F46E5">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">

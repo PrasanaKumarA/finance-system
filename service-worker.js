@@ -1,11 +1,10 @@
-const CACHE_NAME = 'financehub-cache-v8';
+const CACHE_NAME = 'financehub-cache-v9';
 const urlsToCache = [
     './',
     './index.php',
     './login.php',
     './assets/css/style.css',
-    './assets/images/favi.JPG',
-    './manifest.json'
+    './assets/images/favi.JPG'
 ];
 
 self.addEventListener('install', event => {
