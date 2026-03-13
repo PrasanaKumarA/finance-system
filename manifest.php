@@ -1,18 +1,25 @@
 <?php
-header('Content-Type: application/json');
+header("Content-Type: application/manifest+json");
 ?>
 
 {
 "name": "FinanceHub",
 "short_name": "FinanceHub",
+"description": "Personal Finance Management System",
 "start_url": "/index.php",
 "display": "standalone",
+"orientation": "portrait",
 "background_color": "#09090B",
 "theme_color": "#4F46E5",
 "icons": [
 {
 "src": "/assets/images/favi.JPG",
 "sizes": "192x192",
+"type": "image/jpeg"
+},
+{
+"src": "/assets/images/favi.JPG",
+"sizes": "512x512",
 "type": "image/jpeg"
 }
 ]
