@@ -6,7 +6,7 @@
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#09090B",
-    "theme_color": "#4F46E5",
+    "theme_color": "transparent",
     "icons": [
         {
             "src": "/assets/icons/Finance_icon.png",
