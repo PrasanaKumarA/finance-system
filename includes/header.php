@@ -38,7 +38,7 @@ else {
     echo '<link rel="manifest" href="' . (defined('BASE_PATH') ? BASE_PATH : '') . '/manifest.json" crossorigin="use-credentials">';
 }
 ?>
-    <meta name="theme-color" content="#000000ff">
+    <meta name="theme-color" content="transparent">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
